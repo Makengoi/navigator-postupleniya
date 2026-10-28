@@ -98,12 +98,15 @@ td small{font-size:13px}
 .stats{font-size:16px}
 .back{font-size:14px}
 textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.brandname{font-family:var(--display);font-weight:700;font-size:clamp(18px,2.2vw,24px);line-height:1.15;color:var(--ink);text-decoration:none;transition:color var(--dur-1) var(--ease-out)}
+.brandname:hover{color:var(--accent)}
+.topl{gap:14px;min-width:0}
 </style>
 <link rel="stylesheet" href="motion.css">
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><div class="topl"><a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a><a class="back" href="index.html" data-i18n="c.back"></a></div>
+  <div class="top"><div class="topl"><a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a><a class="brandname" href="index.html" data-i18n="title">Навигатор поступления</a></div>
     <div class="topr"><div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div><button class="themebtn" data-theme-toggle></button></div></div>
   <h1 data-i18n="c.title">Кабинет куратора</h1>
   <p class="sub" data-i18n="c.sub"></p>

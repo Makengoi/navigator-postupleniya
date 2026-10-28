@@ -59,10 +59,9 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.6vw,44px);l
 .brand img{display:block;height:36px;width:auto}
 body{transition:background-color var(--dur-3) var(--ease-out),color var(--dur-3) var(--ease-out)}
 .hero .themebtn{border-color:var(--hero-line);background:var(--hero-glass);color:var(--hero-ink)}
-.titlerow{display:flex;align-items:center;gap:clamp(14px,2vw,24px);min-width:0}
-.hero .brand{padding:8px 12px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:rise var(--dur-3) var(--ease-out) both}
-.hero .brand img{height:clamp(56px,6vw,76px)}
-@media (max-width:640px){.hero .brand img{height:48px}.hero .brand{padding:6px 8px;border-radius:12px}}
+.hero .brand{padding:8px 14px;border-radius:16px;margin-bottom:16px;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:rise var(--dur-3) var(--ease-out) both}
+.hero .brand img{height:64px}
+@media (max-width:640px){.hero .brand img{height:48px}.hero .brand{margin-bottom:12px}}
 .langs{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:2px;background:var(--surface)}
 .hero .langs{border-color:var(--hero-line);background:var(--hero-glass)}
 .langs button{font:700 12px var(--body);border:0;background:none;color:var(--muted);padding:4px 10px;border-radius:99px;cursor:pointer;transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out)}
@@ -269,16 +268,13 @@ nav button{font-size:15px;padding:13px 14px}
 .toast{font-size:15px}
 @media (max-width:640px){h2{font-size:18px}.box{padding:16px}.tl li{grid-template-columns:1fr auto}.sub{font-size:16px}}
 </style>
-<link rel="stylesheet" href="motion.css">
 </head>
 <body>
 <div class="hero">
   <header class="edge">
     <div>
-      <div class="titlerow">
-        <a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a>
-        <h1 data-i18n="title">Навигатор поступления</h1>
-      </div>
+      <a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a>
+      <h1 data-i18n="title">Навигатор поступления</h1>
       <p class="sub" data-i18n="sub"></p>
     </div>
     <div class="hright">
@@ -395,7 +391,6 @@ nav button{font-size:15px;padding:13px 14px}
 </div>
 
 <script src="i18n.js"></script>
-<script src="motion.js" defer></script>
 <script src="data.js"></script>
 <script src="feeds.js"></script>
 <script src="news.js"></script>
@@ -454,7 +449,7 @@ function render(){
   }else next.innerHTML=`<div class="k">${t("next.k")}</div><div class="t">${t("next.none")}</div>`;
   let total=0,cnt=0;
   document.getElementById("todo").innerHTML=PROGRAMS.filter(p=>picked.includes(p.id)).map(p=>`<div class="grp">${L(p.name)}</div>`+p.todo.map((s,i)=>{const k=p.id+i;total++;if(done[k])cnt++;return`<label class="check ${done[k]?"done":""}"><input type="checkbox" data-k="${k}" ${done[k]?"checked":""}><span>${L(s)}</span></label>`}).join("")).join("")||`<p class="empty">${t("plan.todoEmpty")}</p>`;
-  const bar=document.getElementById("bar");bar.style.width=total?(cnt/total*100)+"%":"0";bar.classList.toggle("full",!!total&&cnt===total);
+  document.getElementById("bar").style.width=total?(cnt/total*100)+"%":"0";
   const rec=questRecs().progs;
   document.getElementById("progs").innerHTML=PROGRAMS.map((p,i)=>{const on=picked.includes(p.id),ch=changedAt(p.id);return`<article class="prog ${on?"on":""}" style="--i:${i}"><div class="where"><span>${L(p.where)}</span>${rec.includes(p.id)?`<span class="rec">${t("progs.rec")}</span>`:""}</div><h3>${L(p.name)}</h3>${ch?`<div class="chg">${t("progs.changed",{ago:ago(ch)})}</div>`:""}<ul>${p.req.map(r=>`<li>${L(r)}</li>`).join("")}</ul><div class="note">${eventsOf(p).map(e=>`${fmt(e.d)}: ${L(e.t)}${e.exp?` (${t("exp")})`:""}`).join("<br>")}</div><a href="${p.url}" target="_blank" rel="noopener">${t("progs.site")}</a><button class="toggle" data-id="${p.id}">${on?t("progs.in"):t("progs.add")}</button></article>`}).join("");
   document.getElementById("watchnote").textContent=WATCH?.at?t("watch.checked",{ago:ago(WATCH.at)}):"";
@@ -614,10 +609,9 @@ function moveInd(){const b=document.querySelector(`nav [data-tab="${cur}"]`),ind
 function replay(p){p.classList.remove("enter");void p.offsetWidth;p.classList.add("enter")}
 function showTab(tab){
   if(cur==="news"&&tab!=="news"){seenAt=Date.now();save("nav.newsSeen",seenAt)}
-  const prev=cur;cur=tab;
+  cur=tab;
   document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===tab));
-  const dir=TABS.indexOf(tab)>TABS.indexOf(prev)?"next":TABS.indexOf(tab)<TABS.indexOf(prev)?"prev":"";
-  TABS.forEach(n=>{const p=document.getElementById("p-"+n);p.hidden=n!==tab;if(n===tab){p.dataset.dir=dir;replay(p)}});
+  TABS.forEach(n=>{const p=document.getElementById("p-"+n);p.hidden=n!==tab;if(n===tab)replay(p)});
   moveInd();
   if(tab==="news"){if(!seenAt){seenAt=Date.now();save("nav.newsSeen",seenAt)}if(Date.now()-news.at>STALE)refreshNews();renderNews()}
 }

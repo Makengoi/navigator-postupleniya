@@ -133,12 +133,15 @@ select,input[type=text],input[type=date],input[type=number],textarea{font-family
 .rec .k{font-size:12px}
 .back{font-size:14px}
 @media (max-width:480px){.card{padding:18px}.task{font-size:17px}}
+.brandname{font-family:var(--display);font-weight:700;font-size:clamp(18px,2.2vw,24px);line-height:1.15;color:var(--ink);text-decoration:none;transition:color var(--dur-1) var(--ease-out)}
+.brandname:hover{color:var(--accent)}
+.topl{gap:14px;min-width:0}
 </style>
 <link rel="stylesheet" href="motion.css">
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><div class="topl"><a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a><a class="back" href="index.html">← <span data-i18n="title"></span></a></div>
+  <div class="top"><div class="topl"><a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a><a class="brandname" href="index.html" data-i18n="title">Навигатор поступления</a></div>
     <div class="topr"><div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div><button class="themebtn" data-theme-toggle></button></div></div>
   <h1 data-i18n="q.title">Квест профессий</h1>
   <p class="sub" data-i18n="q.sub"></p>
