@@ -59,9 +59,10 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.6vw,44px);l
 .brand img{display:block;height:36px;width:auto}
 body{transition:background-color var(--dur-3) var(--ease-out),color var(--dur-3) var(--ease-out)}
 .hero .themebtn{border-color:var(--hero-line);background:var(--hero-glass);color:var(--hero-ink)}
-.hero .brand{padding:8px 14px;border-radius:16px;margin-bottom:16px;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:rise var(--dur-3) var(--ease-out) both}
-.hero .brand img{height:64px}
-@media (max-width:640px){.hero .brand img{height:48px}.hero .brand{margin-bottom:12px}}
+.titlerow{display:flex;align-items:center;gap:clamp(14px,2vw,24px);min-width:0}
+.hero .brand{padding:8px 12px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:rise var(--dur-3) var(--ease-out) both}
+.hero .brand img{height:clamp(56px,6vw,76px)}
+@media (max-width:640px){.hero .brand img{height:48px}.hero .brand{padding:6px 8px;border-radius:12px}}
 .langs{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:2px;background:var(--surface)}
 .hero .langs{border-color:var(--hero-line);background:var(--hero-glass)}
 .langs button{font:700 12px var(--body);border:0;background:none;color:var(--muted);padding:4px 10px;border-radius:99px;cursor:pointer;transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out)}
@@ -273,8 +274,10 @@ nav button{font-size:15px;padding:13px 14px}
 <div class="hero">
   <header class="edge">
     <div>
-      <a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a>
-      <h1 data-i18n="title">Навигатор поступления</h1>
+      <div class="titlerow">
+        <a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a>
+        <h1 data-i18n="title">Навигатор поступления</h1>
+      </div>
       <p class="sub" data-i18n="sub"></p>
     </div>
     <div class="hright">
