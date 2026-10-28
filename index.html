@@ -2,6 +2,10 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Навигатор">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Навигатор поступления</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -9,7 +13,7 @@
 <script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th;var z=localStorage.getItem("nav.zoom");if(z&&z!="1")document.documentElement.style.zoom=z}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap">
@@ -362,6 +366,15 @@ nav .ni{width:18px;height:18px;flex:none;opacity:.85}
   .ring{width:112px;height:112px}.ring .rc .big{font-size:32px}
   .strip .mt:nth-of-type(even) b{display:none}
 }
+/* Подсказка установки на iPhone и отступ под «чёлку» в режиме приложения */
+header{padding-top:max(28px,calc(env(safe-area-inset-top,0px) + 14px))}
+.ioshint{position:fixed;left:12px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:9;display:flex;gap:12px;align-items:flex-start;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 12px 32px rgba(0,0,0,.22);animation:rise var(--dur-3) var(--ease-out) both}
+.ioshint[hidden]{display:none}
+.ioshint img{border-radius:11px;flex:none}
+.ioshint b{display:block;font-size:16px}
+.ioshint p{margin:4px 0 0;font-size:14px;line-height:1.45;color:var(--muted)}
+.ioshint .sh{width:18px;height:18px;vertical-align:-3px;color:#0A84FF}
+.ioshint .x{font-size:24px;padding:0 4px}
 /* Печать: только план и документы, светлая тема */
 .printhead{display:none}
 @media print{
@@ -521,6 +534,11 @@ nav .ni{width:18px;height:18px;flex:none;opacity:.85}
   </section>
 </div>
 
+<div class="ioshint" id="ioshint" hidden role="dialog" aria-labelledby="ios-t">
+  <img src="icon-192.png" alt="" width="48" height="48">
+  <div><b id="ios-t" data-i18n="ios.title"></b><p id="ios-p"></p></div>
+  <button class="x" id="ios-x" data-i18n-aria="ios.close">×</button>
+</div>
 <dialog class="onb" id="onb" aria-labelledby="onb-t">
   <div class="onb-ill" id="onb-ill"></div>
   <div class="onb-dots" id="onb-dots"></div>
@@ -879,7 +897,7 @@ document.getElementById("docrows").addEventListener("click",e=>{const i=e.target
 
 /* ---------- Язык ---------- */
 document.querySelector(".langs:not(.zoom)").addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b||b.dataset.lang===LANG)return;
-  setLang(b.dataset.lang);document.title=t("title");if(onb.open)renderOnb();render();renderEntInputs();renderEnt();renderNews();moveInd()});
+  setLang(b.dataset.lang);document.title=t("title");if(onb.open)renderOnb();if(!document.getElementById("ioshint").hidden)iosHint();render();renderEntInputs();renderEnt();renderNews();moveInd()});
 
 /* ---------- PWA: офлайн-режим и установка (работает на http/https, не через file://) ---------- */
 if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js").catch(()=>{});
@@ -901,6 +919,16 @@ render();renderEntInputs();renderEnt();moveInd();renderNews();
 if(location.hash&&TABS.includes(location.hash.slice(1)))showTab(location.hash.slice(1));
 if(Date.now()-news.at>STALE)refreshNews();
 if(!load("nav.onb",0)&&typeof onb.showModal==="function"){renderOnb();onb.showModal()}
+
+/* ---------- iPhone: Safari не показывает кнопку установки, поэтому объясняем сами ---------- */
+const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const SHARE_SVG=`<svg class="sh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5v10h14V11h-1"/></svg>`;
+function iosHint(){const h=document.getElementById("ioshint");
+  if(!IOS||navigator.standalone||matchMedia("(display-mode: standalone)").matches||load("nav.iosHint",0)||onb.open){h.hidden=true;return}
+  document.getElementById("ios-p").innerHTML=esc(t("ios.text")).replace("{share}",SHARE_SVG);h.hidden=false}
+document.getElementById("ios-x").addEventListener("click",()=>{save("nav.iosHint",Date.now());document.getElementById("ioshint").hidden=true});
+onb.addEventListener("close",()=>setTimeout(iosHint,400));
+iosHint();
 </script>
 </body>
 </html>
