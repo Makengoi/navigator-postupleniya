@@ -1,0 +1,35 @@
+# Обновляет news.js каждые 30 минут и pages.js раз в день, коммитит изменения — GitHub Pages сразу выкладывает новую версию.
+name: Обновление новостей и проверка сайтов
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # новости
+    - cron: "15 3 * * *"     # сайты приёма, 08:15 по Астане
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Новости
+        run: node update-news.mjs
+      - name: Сайты приёма
+        if: github.event.schedule == '15 3 * * *' || github.event_name == 'workflow_dispatch'
+        run: node check-pages.mjs
+      - name: Коммит
+        run: |
+          git config user.name "navigator-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add news.js pages.js
+          git diff --cached --quiet || (git commit -m "Обновление данных $(date -u +%Y-%m-%dT%H:%MZ)" && git push)

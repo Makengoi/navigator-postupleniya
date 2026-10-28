@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Кабинет куратора</title>
+<meta name="theme-color" content="#1F3A68">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+body{margin:0}[hidden]{display:none!important}
+/* Layout: шапка → поле для кодов учеников → сводка → таблица класса с сортировкой */
+:root{
+  --bg:#F3F6F7; --surface:#FFFFFF; --ink:#14233A; --muted:#5B6B7C; --line:#DCE3E8;
+  --accent:#0B7C83; --accent-soft:#DDF1F1; --warn:#B4541A; --warn-soft:#FBEADF; --ok:#2E7D4F; --ok-soft:#E1F2E7; --bad:#B23B3B; --bad-soft:#F7E1E1;
+  --display:"Unbounded","Manrope",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --dur-1:120ms; --dur-2:220ms; --dur-3:420ms; --stagger:40ms; --ease-out:cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1620; --surface:#16212D; --ink:#E6EDF3; --muted:#93A3B3; --line:#263443;
+  --accent:#3FC1C4; --accent-soft:#163A3E; --warn:#F0A170; --warn-soft:#3A2618; --ok:#6FCB93; --ok-soft:#173527; --bad:#EE8A8A; --bad-soft:#3B1E1E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1620; --surface:#16212D; --ink:#E6EDF3; --muted:#93A3B3; --line:#263443;
+  --accent:#3FC1C4; --accent-soft:#163A3E; --warn:#F0A170; --warn-soft:#3A2618; --ok:#6FCB93; --ok-soft:#173527; --bad:#EE8A8A; --bad-soft:#3B1E1E; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 48px;display:flex;flex-direction:column;gap:18px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.back{font:600 13px var(--body);color:var(--accent);text-decoration:none}
+.langs{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:2px;background:var(--surface)}
+.langs button{font:700 12px var(--body);border:0;background:none;color:var(--muted);padding:4px 10px;border-radius:99px;cursor:pointer}
+.langs button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(22px,4vw,30px);margin:0;line-height:1.15}
+.sub{color:var(--muted);margin:0;max-width:70ch}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;animation:rise var(--dur-3) var(--ease-out) both}
+textarea{font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:90px;resize:vertical;width:100%}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{font:600 14px var(--body);background:var(--accent);color:var(--surface);border:0;border-radius:8px;padding:8px 14px;cursor:pointer;transition:transform var(--dur-1) var(--ease-out)}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid var(--line)}
+button:active{transform:scale(.97)}
+button:focus-visible,textarea:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select{font:14px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.note{font-size:13px;color:var(--muted);margin:0}
+.stats{font-weight:600}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+th[aria-sort]::after{content:" ↕";opacity:.4}
+th[aria-sort="ascending"]::after{content:" ↑";opacity:1}th[aria-sort="descending"]::after{content:" ↓";opacity:1}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr{animation:rise var(--dur-3) var(--ease-out) both;animation-delay:calc(min(var(--i,0),10)*var(--stagger))}
+tr.urgent td:first-child{box-shadow:inset 3px 0 var(--warn)}
+td small{display:block;color:var(--muted);font-size:12px}
+.pill{font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.p-soon{background:var(--warn-soft);color:var(--warn)}.p-ok{background:var(--accent-soft);color:var(--accent)}.p-good{background:var(--ok-soft);color:var(--ok)}.p-bad{background:var(--bad-soft);color:var(--bad)}
+.bar{height:6px;width:80px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:var(--ok)}
+.x{background:none;border:0;color:var(--muted);cursor:pointer;font-size:18px;line-height:1}
+.empty{color:var(--muted);font-size:14px;margin:0;padding:12px 0}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a class="back" href="index.html" data-i18n="c.back"></a>
+    <div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div></div>
+  <h1 data-i18n="c.title">Кабинет куратора</h1>
+  <p class="sub" data-i18n="c.sub"></p>
+  <div class="box">
+    <label for="codes" class="note" data-i18n="c.paste"></label>
+    <textarea id="codes" placeholder="NAV1.eyJ2IjoxLC..."></textarea>
+    <div class="row"><button class="btn" id="add" data-i18n="c.add"></button>
+      <label class="note"><span data-i18n="c.files"></span> <input type="file" id="files" accept=".json,application/json" multiple></label></div>
+    <p class="note" id="msg" role="status"></p>
+  </div>
+  <div class="box">
+    <div class="row" style="justify-content:space-between">
+      <span class="stats" id="stats"></span>
+      <div class="row"><select id="cls"></select><button class="btn ghost" id="csv" data-i18n="c.csv"></button><button class="btn danger" id="clear" data-i18n="c.clear"></button></div>
+    </div>
+    <div class="scroll"><table><thead><tr>
+      <th data-s="n" data-i18n="c.th.name"></th><th data-s="c" data-i18n="c.th.class"></th><th data-s="next" aria-sort="ascending" data-i18n="c.th.next"></th>
+      <th data-s="pct" data-i18n="c.th.steps"></th><th data-s="docs" data-i18n="c.th.docs"></th><th data-s="ent" data-i18n="c.th.ent"></th>
+      <th data-i18n="c.th.progs"></th><th data-i18n="c.th.quest"></th><th data-s="at" data-i18n="c.th.at"></th><th></th></tr></thead>
+      <tbody id="rows"></tbody></table></div>
+    <p class="empty" id="empty" data-i18n="c.empty"></p>
+    <p class="note" data-i18n="c.urgent"></p>
+  </div>
+</div>
+<script src="i18n.js"></script>
+<script src="data.js"></script>
+<script>
+const PROG=Object.fromEntries(PROGRAMS.map(p=>[p.id,p]));
+let TODAY=new Date();TODAY.setHours(0,0,0,0);
+function load(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let students=load("nav.curator",{});
+let sort={k:"next",dir:1},cls="";
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=d=>navFmt(d,true);
+
+function decode(code){
+  const b=code.trim().replace(/^NAV1\./,"").replace(/-/g,"+").replace(/_/g,"/");
+  const bin=atob(b+"===".slice((b.length+3)%4));
+  return JSON.parse(new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0))));
+}
+function valid(r){return r&&r.v===1&&typeof r.n==="string"&&r.n&&Array.isArray(r.p)}
+function addReports(list){
+  let ok=0;list.forEach(r=>{if(!valid(r))return;const key=(r.n+"|"+(r.c||"")).toLowerCase();
+    if(!students[key]||students[key].at<=r.at){students[key]=r}ok++});
+  save("nav.curator",students);return ok;
+}
+// Сводка по ученику: ближайший дедлайн по выбранным программам, доля выполненных шагов, готовые эссе
+function summary(r){
+  const progs=r.p.filter(id=>PROG[id]);
+  const evs=progs.flatMap(id=>PROG[id].events.map(e=>({...navRoll(e,TODAY),p:PROG[id]}))).filter(e=>new Date(e.d+"T00:00")>=TODAY).sort((a,b)=>a.d.localeCompare(b.d));
+  const steps=progs.reduce((a,id)=>a+PROG[id].todo.length,0);
+  const doneN=(r.d||[]).filter(k=>progs.some(id=>k.startsWith(id)&&PROG[id].todo[+k.slice(id.length)])).length;
+  const next=evs[0];const nd=next?Math.round((new Date(next.d+"T00:00")-TODAY)/864e5):9999;
+  return{progs,next,nd,pct:steps?Math.round(doneN/steps*100):0,docsReady:(r.docs||[]).filter(d=>d.s===3).length,docsAll:(r.docs||[]).length,ent:r.e?.t??-1};
+}
+function render(){
+  const all=Object.entries(students).map(([key,r])=>({key,r,s:summary(r)}));
+  const classes=[...new Set(all.map(x=>x.r.c).filter(Boolean))].sort();
+  const sel=document.getElementById("cls");
+  sel.innerHTML=`<option value="">${t("c.filter")}</option>`+classes.map(c=>`<option ${c===cls?"selected":""}>${esc(c)}</option>`).join("");
+  const list=all.filter(x=>!cls||x.r.c===cls);
+  const val=x=>({n:x.r.n.toLowerCase(),c:(x.r.c||"").toLowerCase(),next:x.s.nd,pct:x.s.pct,docs:x.s.docsReady,ent:x.s.ent,at:x.r.at})[sort.k];
+  list.sort((a,b)=>{const A=val(a),B=val(b);return(A<B?-1:A>B?1:0)*sort.dir});
+  document.querySelectorAll("th[data-s]").forEach(th=>th.setAttribute("aria-sort",th.dataset.s===sort.k?(sort.dir>0?"ascending":"descending"):"none"));
+  document.getElementById("rows").innerHTML=list.map((x,i)=>{const s=x.s,r=x.r;
+    const np=s.next?`<span class="pill ${s.nd<=14?"p-soon":"p-ok"}">${t("days",{n:s.nd})}</span><small>${esc(L(s.next.p.name))}: ${fmt(s.next.d)}</small>`:"—";
+    const en=r.e?`<span class="pill ${r.e.v?(r.e.t>=100?"p-good":r.e.t>=65?"p-ok":"p-soon"):"p-bad"}">${r.e.t}</span>`:"—";
+    return`<tr class="${s.nd<=14?"urgent":""}" style="--i:${i}"><td><b>${esc(r.n)}</b></td><td>${esc(r.c)}</td><td>${np}</td>
+    <td>${s.pct}%<div class="bar"><i style="width:${s.pct}%"></i></div></td><td>${s.docsReady} / ${s.docsAll}</td><td>${en}</td>
+    <td>${s.progs.map(id=>esc(L(PROG[id].name))).join("<br>")}</td><td>${(r.q||[]).map(a=>esc(t("area."+a))).join("<br>")||"—"}</td>
+    <td><small>${navFmt(navIso(new Date(r.at)))}</small></td><td><button class="x" data-del="${esc(x.key)}" aria-label="×">×</button></td></tr>`}).join("");
+  document.getElementById("empty").hidden=list.length>0;
+  const urgent=list.filter(x=>x.s.nd<=14).length,avg=list.length?Math.round(list.reduce((a,x)=>a+x.s.pct,0)/list.length):0;
+  document.getElementById("stats").textContent=list.length?t("c.stats",{n:list.length,u:urgent,p:avg}):"";
+}
+function msg(ok,bad){document.getElementById("msg").textContent=[ok?t("c.added",{n:ok}):"",bad?t("c.bad",{n:bad}):""].filter(Boolean).join(" ")}
+document.getElementById("add").addEventListener("click",()=>{
+  const lines=document.getElementById("codes").value.split(/\s+/).filter(l=>l.startsWith("NAV1."));
+  const reps=[];let bad=0;lines.forEach(l=>{try{reps.push(decode(l))}catch(e){bad++}});
+  const ok=addReports(reps);bad+=reps.length-ok;msg(ok,bad);if(ok)document.getElementById("codes").value="";render();
+});
+document.getElementById("files").addEventListener("change",async e=>{
+  const reps=[];let bad=0;for(const f of e.target.files){try{reps.push(JSON.parse(await f.text()))}catch(err){bad++}}
+  const ok=addReports(reps);msg(ok,bad+reps.length-ok);e.target.value="";render();
+});
+document.querySelector("thead").addEventListener("click",e=>{const k=e.target.closest("th")?.dataset.s;if(!k)return;sort=sort.k===k?{k,dir:-sort.dir}:{k,dir:1};render()});
+document.getElementById("rows").addEventListener("click",e=>{const k=e.target.dataset.del;if(!k)return;delete students[k];save("nav.curator",students);render()});
+document.getElementById("cls").addEventListener("change",e=>{cls=e.target.value;render()});
+document.getElementById("clear").addEventListener("click",()=>{if(!confirm(t("c.clearQ")))return;students={};save("nav.curator",students);render()});
+document.getElementById("csv").addEventListener("click",()=>{
+  const q=s=>`"${String(s??"").replace(/"/g,'""')}"`;
+  const head=["c.th.name","c.th.class","c.th.next","c.th.steps","c.th.docs","c.th.ent","c.th.progs","c.th.quest","c.th.at"].map(k=>q(t(k)));
+  const rows=Object.values(students).filter(r=>!cls||r.c===cls).map(r=>{const s=summary(r);return[r.n,r.c,s.next?`${L(s.next.p.name)} ${s.next.d} (${s.nd})`:"",s.pct+"%",`${s.docsReady}/${s.docsAll}`,r.e?r.e.t:"",s.progs.map(id=>L(PROG[id].name)).join("; "),(r.q||[]).map(a=>t("area."+a)).join("; "),new Date(r.at).toISOString().slice(0,10)].map(q)});
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+[head,...rows].map(r=>r.join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"}));
+  a.download="klass-postuplenie.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1e3);
+});
+document.querySelector(".langs").addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b)return;setLang(b.dataset.lang);document.title=t("c.title");render()});
+applyI18n();document.title=t("c.title");render();
+</script>
+</body>
+</html>
