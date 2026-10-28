@@ -180,10 +180,24 @@ function navThemeButtons() {
   var m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = dark ? "#132338" : "#1F3A68";
 }
 document.addEventListener("click", function (e) {
-  if (!e.target.closest("[data-theme-toggle]")) return;
-  var next = navTheme() === "dark" ? "light" : "dark";
-  document.documentElement.dataset.theme = next;
-  try { localStorage.setItem("nav.theme", next); } catch (err) {}
-  navThemeButtons();
+  var btn = e.target.closest("[data-theme-toggle]");
+  if (!btn) return;
+  var root = document.documentElement, next = navTheme() === "dark" ? "light" : "dark";
+  var apply = function () {
+    root.dataset.theme = next;
+    try { localStorage.setItem("nav.theme", next); } catch (err) {}
+    navThemeButtons();
+  };
+  // Новая тема расходится кругом от кнопки. Без View Transitions или при reduced motion: сразу
+  if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) return apply();
+  var r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+  var rad = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  root.classList.add("vt");
+  var vt = document.startViewTransition(apply);
+  vt.ready.then(function () {
+    root.animate({ clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + rad + "px at " + x + "px " + y + "px)"] },
+      { duration: 480, easing: "cubic-bezier(.65,0,.35,1)", pseudoElement: "::view-transition-new(root)" });
+  }).catch(function () {});
+  vt.finished.finally(function () { root.classList.remove("vt"); });
 });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", navThemeButtons);

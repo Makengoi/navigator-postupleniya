@@ -1,0 +1,46 @@
+/* Общие анимации для всех страниц. Правила: .claude/skills/motion/SKILL.md */
+
+/* Смена темы: круг расходится от кнопки (View Transitions, анимацию задаёт i18n.js) */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-new(root){z-index:2}
+.vt *,.vt *::before,.vt *::after{transition:none!important}
+
+/* Появление при прокрутке: класс .rv ставит motion.js только тем блокам, что ниже экрана */
+.rv{opacity:0;transform:translateY(16px)}
+.rv.in{opacity:1;transform:none;transition:opacity var(--dur-3) var(--ease-out),transform var(--dur-3) var(--ease-out);transition-delay:calc(min(var(--ri,0),10)*var(--stagger))}
+
+/* Волна от точки нажатия */
+.rp-host{position:relative;overflow:hidden}
+.rp{position:absolute;border-radius:50%;background:currentColor;opacity:.22;transform:scale(0);pointer-events:none;animation:ripple 480ms var(--ease-out) forwards}
+@keyframes ripple{to{transform:scale(1);opacity:0}}
+
+/* Логотип: лёгкий наклон под курсором */
+.brand img{transition:transform var(--dur-2) var(--ease-spring)}
+@media (hover:hover){.brand:hover img{transform:rotate(-3deg) scale(1.04)}}
+
+/* Шапка: декоративные круги медленно плавают */
+.hero::before{animation:drift1 24s ease-in-out infinite alternate}
+.hero::after{animation:drift2 30s ease-in-out infinite alternate}
+@keyframes drift1{from{transform:translate(0,0) rotate(0)}to{transform:translate(-40px,30px) rotate(25deg)}}
+@keyframes drift2{from{transform:translate(0,0) scale(1)}to{transform:translate(60px,-24px) scale(1.12)}}
+
+/* Вкладки прилипли к верху: под ними появляется тень */
+.navbar::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;background:linear-gradient(rgba(20,35,58,.14),transparent);opacity:0;pointer-events:none;transition:opacity var(--dur-2) var(--ease-out)}
+.navbar.stuck::after{opacity:1}
+
+/* Смена вкладки: панель въезжает со стороны выбранной вкладки */
+.wrap{overflow-x:clip}
+.panel.enter[data-dir="next"]{animation-name:fromR}
+.panel.enter[data-dir="prev"]{animation-name:fromL}
+@keyframes fromR{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes fromL{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+
+/* План выполнен на 100%: по полосе пробегает блик */
+.bar i{position:relative;overflow:hidden}
+.bar i.full::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);transform:translateX(-100%);animation:sweep 480ms var(--ease-out) var(--dur-3) both}
+@keyframes sweep{to{transform:translateX(100%)}}
+
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none}
+  .hero::before,.hero::after{animation:none}
+}

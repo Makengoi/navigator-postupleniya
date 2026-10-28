@@ -269,6 +269,7 @@ nav button{font-size:15px;padding:13px 14px}
 .toast{font-size:15px}
 @media (max-width:640px){h2{font-size:18px}.box{padding:16px}.tl li{grid-template-columns:1fr auto}.sub{font-size:16px}}
 </style>
+<link rel="stylesheet" href="motion.css">
 </head>
 <body>
 <div class="hero">
@@ -394,6 +395,7 @@ nav button{font-size:15px;padding:13px 14px}
 </div>
 
 <script src="i18n.js"></script>
+<script src="motion.js" defer></script>
 <script src="data.js"></script>
 <script src="feeds.js"></script>
 <script src="news.js"></script>
@@ -452,7 +454,7 @@ function render(){
   }else next.innerHTML=`<div class="k">${t("next.k")}</div><div class="t">${t("next.none")}</div>`;
   let total=0,cnt=0;
   document.getElementById("todo").innerHTML=PROGRAMS.filter(p=>picked.includes(p.id)).map(p=>`<div class="grp">${L(p.name)}</div>`+p.todo.map((s,i)=>{const k=p.id+i;total++;if(done[k])cnt++;return`<label class="check ${done[k]?"done":""}"><input type="checkbox" data-k="${k}" ${done[k]?"checked":""}><span>${L(s)}</span></label>`}).join("")).join("")||`<p class="empty">${t("plan.todoEmpty")}</p>`;
-  document.getElementById("bar").style.width=total?(cnt/total*100)+"%":"0";
+  const bar=document.getElementById("bar");bar.style.width=total?(cnt/total*100)+"%":"0";bar.classList.toggle("full",!!total&&cnt===total);
   const rec=questRecs().progs;
   document.getElementById("progs").innerHTML=PROGRAMS.map((p,i)=>{const on=picked.includes(p.id),ch=changedAt(p.id);return`<article class="prog ${on?"on":""}" style="--i:${i}"><div class="where"><span>${L(p.where)}</span>${rec.includes(p.id)?`<span class="rec">${t("progs.rec")}</span>`:""}</div><h3>${L(p.name)}</h3>${ch?`<div class="chg">${t("progs.changed",{ago:ago(ch)})}</div>`:""}<ul>${p.req.map(r=>`<li>${L(r)}</li>`).join("")}</ul><div class="note">${eventsOf(p).map(e=>`${fmt(e.d)}: ${L(e.t)}${e.exp?` (${t("exp")})`:""}`).join("<br>")}</div><a href="${p.url}" target="_blank" rel="noopener">${t("progs.site")}</a><button class="toggle" data-id="${p.id}">${on?t("progs.in"):t("progs.add")}</button></article>`}).join("");
   document.getElementById("watchnote").textContent=WATCH?.at?t("watch.checked",{ago:ago(WATCH.at)}):"";
@@ -612,9 +614,10 @@ function moveInd(){const b=document.querySelector(`nav [data-tab="${cur}"]`),ind
 function replay(p){p.classList.remove("enter");void p.offsetWidth;p.classList.add("enter")}
 function showTab(tab){
   if(cur==="news"&&tab!=="news"){seenAt=Date.now();save("nav.newsSeen",seenAt)}
-  cur=tab;
+  const prev=cur;cur=tab;
   document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===tab));
-  TABS.forEach(n=>{const p=document.getElementById("p-"+n);p.hidden=n!==tab;if(n===tab)replay(p)});
+  const dir=TABS.indexOf(tab)>TABS.indexOf(prev)?"next":TABS.indexOf(tab)<TABS.indexOf(prev)?"prev":"";
+  TABS.forEach(n=>{const p=document.getElementById("p-"+n);p.hidden=n!==tab;if(n===tab){p.dataset.dir=dir;replay(p)}});
   moveInd();
   if(tab==="news"){if(!seenAt){seenAt=Date.now();save("nav.newsSeen",seenAt)}if(Date.now()-news.at>STALE)refreshNews();renderNews()}
 }

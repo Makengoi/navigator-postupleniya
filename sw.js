@@ -1,7 +1,7 @@
 // Офлайн-режим. Страницы и скрипты: сначала сеть, при ошибке — кэш (так обновления приходят сразу).
 // news.js и pages.js тоже идут через сеть с запасным кэшем. При изменении списка файлов поднимите VERSION.
-const VERSION = "nav-v2";
-const SHELL = ["./", "index.html", "quest.html", "curator.html", "i18n.js", "data.js", "feeds.js", "news.js", "pages.js", "icon.svg", "icon-192.png", "nis-logo.png", "manifest.webmanifest"];
+const VERSION = "nav-v3";
+const SHELL = ["./", "index.html", "quest.html", "curator.html", "i18n.js", "motion.css", "motion.js", "data.js", "feeds.js", "news.js", "pages.js", "icon.svg", "icon-192.png", "nis-logo.png", "manifest.webmanifest"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
