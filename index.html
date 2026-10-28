@@ -6,6 +6,7 @@
 <title>Навигатор поступления</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#1F3A68">
+<script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -49,6 +50,16 @@ header{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;padd
 h1{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.6vw,44px);line-height:1.1;margin:0;text-wrap:balance;animation:rise var(--dur-3) var(--ease-out) both}
 .sub{color:var(--hero-muted);margin:10px 0 0;max-width:62ch;font-size:16px;animation:rise var(--dur-3) var(--ease-out) both;animation-delay:var(--stagger)}
 .toprow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.themebtn{width:32px;height:32px;display:inline-grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;padding:0;transition:background var(--dur-2) var(--ease-out),transform var(--dur-1) var(--ease-out)}
+.themebtn svg{width:16px;height:16px;animation:themeIn var(--dur-3) var(--ease-spring)}
+@keyframes themeIn{from{transform:rotate(-90deg) scale(.4);opacity:0}to{transform:none;opacity:1}}
+.brand{display:inline-flex;align-items:center;background:#fff;border-radius:12px;padding:6px 10px;text-decoration:none;flex:none}
+.brand img{display:block;height:36px;width:auto}
+body{transition:background-color var(--dur-3) var(--ease-out),color var(--dur-3) var(--ease-out)}
+.hero .themebtn{border-color:var(--hero-line);background:var(--hero-glass);color:var(--hero-ink)}
+.hero .brand{padding:8px 14px;border-radius:16px;margin-bottom:16px;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:rise var(--dur-3) var(--ease-out) both}
+.hero .brand img{height:64px}
+@media (max-width:640px){.hero .brand img{height:48px}.hero .brand{margin-bottom:12px}}
 .langs{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:2px;background:var(--surface)}
 .hero .langs{border-color:var(--hero-line);background:var(--hero-glass)}
 .langs button{font:700 12px var(--body);border:0;background:none;color:var(--muted);padding:4px 10px;border-radius:99px;cursor:pointer;transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out)}
@@ -198,6 +209,7 @@ select,input[type=text],input[type=date],input[type=number]{font:14px var(--body
 <div class="hero">
   <header class="edge">
     <div>
+      <a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a>
       <h1 data-i18n="title">Навигатор поступления</h1>
       <p class="sub" data-i18n="sub"></p>
     </div>
@@ -205,6 +217,7 @@ select,input[type=text],input[type=date],input[type=number]{font:14px var(--body
       <div class="toprow">
         <button class="install" id="install" hidden data-i18n="pwa.install"></button>
         <div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div>
+        <button class="themebtn" data-theme-toggle></button>
       </div>
       <div class="next" id="next"></div>
     </div>

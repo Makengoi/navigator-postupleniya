@@ -139,6 +139,8 @@ function applyI18n() {
   document.querySelectorAll("[data-i18n-aria]").forEach(function (el) { el.setAttribute("aria-label", t(el.dataset.i18nAria)); });
   document.querySelectorAll("[data-i18n-title]").forEach(function (el) { el.title = t(el.dataset.i18nTitle); });
   document.querySelectorAll("[data-lang]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.lang === LANG); });
+  document.querySelectorAll("[data-i18n-alt]").forEach(function (el) { el.alt = t(el.dataset.i18nAlt); });
+  if (typeof navThemeButtons === "function") navThemeButtons();
 }
 function setLang(l) { LANG = l; try { localStorage.setItem("nav.lang", l); } catch (e) {} applyI18n(); }
 function ago(ts) {
@@ -161,3 +163,27 @@ function navFmt(iso, noYear) {
   if (LANG === "kk") return d.getDate() + " " + KK_MONTHS[d.getMonth()] + (noYear ? "" : " " + d.getFullYear());
   return d.toLocaleDateString("ru-RU", noYear ? { day: "numeric", month: "short" } : { day: "numeric", month: "short", year: "numeric" });
 }
+// День / ночь. Выбор хранится в localStorage (nav.theme); без выбора тема следует настройке системы.
+// Чтобы не мигало, каждая страница ставит data-theme ещё в <head>, здесь только кнопка.
+I18N.ru["theme.toDark"] = "Включить ночную тему"; I18N.kk["theme.toDark"] = "Түнгі режимді қосу";
+I18N.ru["theme.toLight"] = "Включить дневную тему"; I18N.kk["theme.toLight"] = "Күндізгі режимді қосу";
+I18N.ru["logo.alt"] = "NIS Туркестан"; I18N.kk["logo.alt"] = "NIS Түркістан";
+var NAV_SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+var NAV_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg>';
+function navTheme() { return document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); }
+function navThemeButtons() {
+  var dark = navTheme() === "dark";
+  document.querySelectorAll("[data-theme-toggle]").forEach(function (b) {
+    b.innerHTML = dark ? NAV_SUN : NAV_MOON;
+    b.setAttribute("aria-label", t(dark ? "theme.toLight" : "theme.toDark")); b.title = b.getAttribute("aria-label");
+  });
+  var m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = dark ? "#132338" : "#1F3A68";
+}
+document.addEventListener("click", function (e) {
+  if (!e.target.closest("[data-theme-toggle]")) return;
+  var next = navTheme() === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem("nav.theme", next); } catch (err) {}
+  navThemeButtons();
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", navThemeButtons);

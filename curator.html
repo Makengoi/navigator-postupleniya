@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Кабинет куратора</title>
 <meta name="theme-color" content="#1F3A68">
+<script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap">
@@ -15,7 +16,7 @@ body{margin:0}[hidden]{display:none!important}
   --bg:#F3F6F7; --surface:#FFFFFF; --ink:#14233A; --muted:#5B6B7C; --line:#DCE3E8;
   --accent:#0B7C83; --accent-soft:#DDF1F1; --warn:#B4541A; --warn-soft:#FBEADF; --ok:#2E7D4F; --ok-soft:#E1F2E7; --bad:#B23B3B; --bad-soft:#F7E1E1;
   --display:"Unbounded","Manrope",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --dur-1:120ms; --dur-2:220ms; --dur-3:420ms; --stagger:40ms; --ease-out:cubic-bezier(.2,.8,.2,1);
+  --dur-1:120ms; --dur-2:220ms; --dur-3:420ms; --stagger:40ms; --ease-out:cubic-bezier(.2,.8,.2,1); --ease-spring:cubic-bezier(.34,1.56,.64,1);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0E1620; --surface:#16212D; --ink:#E6EDF3; --muted:#93A3B3; --line:#263443;
@@ -61,12 +62,20 @@ td small{display:block;color:var(--muted);font-size:12px}
 .empty{color:var(--muted);font-size:14px;margin:0;padding:12px 0}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.themebtn{width:32px;height:32px;display:inline-grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;padding:0;transition:background var(--dur-2) var(--ease-out),transform var(--dur-1) var(--ease-out)}
+.themebtn svg{width:16px;height:16px;animation:themeIn var(--dur-3) var(--ease-spring)}
+@keyframes themeIn{from{transform:rotate(-90deg) scale(.4);opacity:0}to{transform:none;opacity:1}}
+.brand{display:inline-flex;align-items:center;background:#fff;border-radius:12px;padding:6px 10px;text-decoration:none;flex:none}
+.brand img{display:block;height:36px;width:auto}
+body{transition:background-color var(--dur-3) var(--ease-out),color var(--dur-3) var(--ease-out)}
+.topl{display:flex;align-items:center;gap:12px}
+.topr{display:flex;align-items:center;gap:8px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><a class="back" href="index.html" data-i18n="c.back"></a>
-    <div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div></div>
+  <div class="top"><div class="topl"><a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a><a class="back" href="index.html" data-i18n="c.back"></a></div>
+    <div class="topr"><div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div><button class="themebtn" data-theme-toggle></button></div></div>
   <h1 data-i18n="c.title">Кабинет куратора</h1>
   <p class="sub" data-i18n="c.sub"></p>
   <div class="box">

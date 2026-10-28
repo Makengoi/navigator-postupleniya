@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Квест профессий</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#1F3A68">
+<script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th}catch(e){}</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
 body{margin:0}[hidden]{display:none!important}
@@ -89,12 +91,20 @@ button:active:not(:disabled){transform:scale(.97)}
 .langs button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
 .saved{margin:0;padding:12px 14px;border-radius:10px;background:var(--accent-soft);color:var(--ink);font-size:14px}
 a.btn{text-decoration:none;display:inline-block}
+.themebtn{width:32px;height:32px;display:inline-grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;padding:0;transition:background var(--dur-2) var(--ease-out),transform var(--dur-1) var(--ease-out)}
+.themebtn svg{width:16px;height:16px;animation:themeIn var(--dur-3) var(--ease-spring)}
+@keyframes themeIn{from{transform:rotate(-90deg) scale(.4);opacity:0}to{transform:none;opacity:1}}
+.brand{display:inline-flex;align-items:center;background:#fff;border-radius:12px;padding:6px 10px;text-decoration:none;flex:none}
+.brand img{display:block;height:36px;width:auto}
+body{transition:background-color var(--dur-3) var(--ease-out),color var(--dur-3) var(--ease-out)}
+.topl{display:flex;align-items:center;gap:12px}
+.topr{display:flex;align-items:center;gap:8px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><a class="back" href="index.html">← <span data-i18n="title"></span></a>
-    <div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div></div>
+  <div class="top"><div class="topl"><a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a><a class="back" href="index.html">← <span data-i18n="title"></span></a></div>
+    <div class="topr"><div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div><button class="themebtn" data-theme-toggle></button></div></div>
   <h1 data-i18n="q.title">Квест профессий</h1>
   <p class="sub" data-i18n="q.sub"></p>
   <div class="route" id="route"></div>
