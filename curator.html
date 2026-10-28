@@ -8,14 +8,16 @@
 <script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap">
 <style>
 body{margin:0}[hidden]{display:none!important}
 /* Layout: шапка → поле для кодов учеников → сводка → таблица класса с сортировкой */
 :root{
   --bg:#F3F6F7; --surface:#FFFFFF; --ink:#14233A; --muted:#5B6B7C; --line:#DCE3E8;
   --accent:#0B7C83; --accent-soft:#DDF1F1; --warn:#B4541A; --warn-soft:#FBEADF; --ok:#2E7D4F; --ok-soft:#E1F2E7; --bad:#B23B3B; --bad-soft:#F7E1E1;
-  --display:"Unbounded","Manrope",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:"Lora",Georgia,"Times New Roman",serif; --body:"Lora",Georgia,"Times New Roman",serif;
   --dur-1:120ms; --dur-2:220ms; --dur-3:420ms; --stagger:40ms; --ease-out:cubic-bezier(.2,.8,.2,1); --ease-spring:cubic-bezier(.34,1.56,.64,1);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -54,7 +56,7 @@ td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 tbody tr{animation:rise var(--dur-3) var(--ease-out) both;animation-delay:calc(min(var(--i,0),10)*var(--stagger))}
 tr.urgent td:first-child{box-shadow:inset 3px 0 var(--warn)}
 td small{display:block;color:var(--muted);font-size:12px}
-.pill{font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pill{font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap;font-variant-numeric:lining-nums}
 .p-soon{background:var(--warn-soft);color:var(--warn)}.p-ok{background:var(--accent-soft);color:var(--accent)}.p-good{background:var(--ok-soft);color:var(--ok)}.p-bad{background:var(--bad-soft);color:var(--bad)}
 .bar{height:6px;width:80px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px}
 .bar i{display:block;height:100%;background:var(--ok)}
@@ -70,6 +72,32 @@ td small{display:block;color:var(--muted);font-size:12px}
 body{transition:background-color var(--dur-3) var(--ease-out),color var(--dur-3) var(--ease-out)}
 .topl{display:flex;align-items:center;gap:12px}
 .topr{display:flex;align-items:center;gap:8px}
+/* Читаемость: Lora, крупнее кегль и отступы, контрастнее второстепенный текст, кнопки и поля не меньше 40px */
+:root{--muted:#4E5D6C}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--muted:#A7B4C2}}
+:root[data-theme="dark"]{--muted:#A7B4C2}
+body{font-size:16px;line-height:1.6;font-variant-numeric:lining-nums;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1{font-weight:700;letter-spacing:-.01em;line-height:1.12}
+h2{font-weight:600;font-size:20px;line-height:1.3;letter-spacing:-.005em}
+h3{font-weight:600}
+.note{font-size:14px;line-height:1.55}
+.empty{font-size:15px}
+.btn{font-size:15px;font-weight:600;padding:10px 16px;min-height:42px;border-radius:10px}
+.btn.sm{font-size:14px;padding:7px 12px;min-height:36px}
+select,input[type=text],input[type=date],input[type=number],textarea{font-family:var(--body);font-size:15px;padding:9px 12px;min-height:42px;border-radius:10px}
+.langs button{font-family:var(--body);font-size:13px;padding:5px 12px}
+.themebtn{width:36px;height:36px}
+.wrap{gap:22px}
+.sub{font-size:17px}
+.box{padding:20px 22px;border-radius:14px;gap:14px}
+table{font-size:15px}
+th{font-size:13px;padding:8px}
+td{padding:12px 8px}
+td small{font-size:13px}
+.pill{font-size:13px;padding:3px 10px}
+.stats{font-size:16px}
+.back{font-size:14px}
+textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
 </style>
 </head>
 <body>

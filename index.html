@@ -10,7 +10,9 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap">
 <style>
 body{margin:0}[hidden]{display:none!important}
 /* Layout: шапка с языком и отсчётом до ближайшего дедлайна → вкладки (План / Программы / ЕНТ / Документы / Новости) → одна колонка, на широком экране две */
@@ -19,7 +21,7 @@ body{margin:0}[hidden]{display:none!important}
   --accent:#0B7C83; --accent-soft:#DDF1F1; --lapis:#1F3A68; --warn:#B4541A; --warn-soft:#FBEADF; --ok:#2E7D4F; --ok-soft:#E1F2E7;
   --bad:#B23B3B; --bad-soft:#F7E1E1; --sun:#C98A12; --sun-soft:#F8ECD0;
   --sci:#6B4BB8; --sci-soft:#ECE6F8; --shadow:0 6px 18px rgba(20,35,58,.10);
-  --display:"Unbounded","Manrope",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:"Lora",Georgia,"Times New Roman",serif; --body:"Lora",Georgia,"Times New Roman",serif;
   --dur-1:120ms; --dur-2:220ms; --dur-3:420ms; --stagger:40ms;
   --ease-out:cubic-bezier(.2,.8,.2,1); --ease-in-out:cubic-bezier(.65,0,.35,1); --ease-spring:cubic-bezier(.34,1.56,.64,1);
 }
@@ -68,7 +70,7 @@ body{transition:background-color var(--dur-3) var(--ease-out),color var(--dur-3)
 .install{font:600 12px var(--body);border:1px solid var(--hero-line);color:var(--hero-ink);background:var(--hero-glass);border-radius:99px;padding:5px 10px;cursor:pointer}
 .next{background:var(--hero-glass);border:1px solid var(--hero-line);color:var(--hero-ink);border-radius:16px;padding:16px 20px;min-width:260px;backdrop-filter:blur(6px);animation:rise var(--dur-3) var(--ease-out) both;animation-delay:calc(2*var(--stagger))}
 .next .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.8;display:flex;align-items:center;gap:8px}
-.next .n{font-family:var(--display);font-size:clamp(28px,3vw,38px);font-variant-numeric:tabular-nums}
+.next .n{font-family:var(--display);font-size:clamp(28px,3vw,38px);font-variant-numeric:lining-nums}
 .next .t{font-size:13px;font-weight:600}
 .dot{width:8px;height:8px;border-radius:50%;background:#F0A170;position:relative}
 .dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:#F0A170;animation:ping 1.6s var(--ease-out) infinite}
@@ -100,10 +102,10 @@ h2{font-family:var(--display);font-weight:500;font-size:17px;margin:0}
 .tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .tl li{display:grid;grid-template-columns:112px 1fr auto;gap:12px;padding:10px 0;border-top:1px solid var(--line);align-items:baseline}
 .tl li:first-child{border-top:0}
-.date{font-variant-numeric:tabular-nums;font-weight:700;font-size:13px}
+.date{font-variant-numeric:lining-nums;font-weight:700;font-size:13px}
 .ev b{display:block;font-weight:600}
 .ev span{color:var(--muted);font-size:13px}
-.pill{font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pill{font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap;font-variant-numeric:lining-nums}
 .p-soon{background:var(--warn-soft);color:var(--warn)}
 .p-ok{background:var(--accent-soft);color:var(--accent)}
 .p-good{background:var(--ok-soft);color:var(--ok)}
@@ -154,10 +156,10 @@ select,input[type=text],input[type=date],input[type=number]{font:14px var(--body
 .subj{display:grid;grid-template-columns:1fr 88px;gap:8px 12px;align-items:center}
 .subj label{font-size:14px;font-weight:600}
 .subj label small{display:block;font-weight:500;color:var(--muted);font-size:12px}
-.subj input{width:88px;text-align:right;font-variant-numeric:tabular-nums}
+.subj input{width:88px;text-align:right;font-variant-numeric:lining-nums}
 .subj input.low{border-color:var(--bad);background:var(--bad-soft)}
 .total{display:flex;align-items:baseline;gap:8px;border-top:1px solid var(--line);padding-top:12px}
-.total .big{font-family:var(--display);font-size:34px;font-variant-numeric:tabular-nums}
+.total .big{font-family:var(--display);font-size:34px;font-variant-numeric:lining-nums}
 .floors{display:flex;flex-direction:column;gap:8px}
 .floor{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px}
 .groups{display:flex;flex-direction:column}
@@ -203,6 +205,68 @@ select,input[type=text],input[type=date],input[type=number]{font:14px var(--body
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+/* Читаемость: Lora, крупнее кегль и отступы, контрастнее второстепенный текст, кнопки и поля не меньше 40px */
+:root{--muted:#4E5D6C}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--muted:#A7B4C2}}
+:root[data-theme="dark"]{--muted:#A7B4C2}
+body{font-size:16px;line-height:1.6;font-variant-numeric:lining-nums;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1{font-weight:700;letter-spacing:-.01em;line-height:1.12}
+h2{font-weight:600;font-size:20px;line-height:1.3;letter-spacing:-.005em}
+h3{font-weight:600}
+.note{font-size:14px;line-height:1.55}
+.empty{font-size:15px}
+.btn{font-size:15px;font-weight:600;padding:10px 16px;min-height:42px;border-radius:10px}
+.btn.sm{font-size:14px;padding:7px 12px;min-height:36px}
+select,input[type=text],input[type=date],input[type=number],textarea{font-family:var(--body);font-size:15px;padding:9px 12px;min-height:42px;border-radius:10px}
+.langs button{font-family:var(--body);font-size:13px;padding:5px 12px}
+.themebtn{width:36px;height:36px}
+.wrap{gap:24px;padding-block:24px 56px}
+.cols,.cols3{gap:24px}
+.box{padding:20px 22px;gap:14px;border-radius:14px}
+.sub{font-size:17px;max-width:58ch}
+.next .k{font-size:12px;letter-spacing:.06em}
+.next .n{font-weight:700}
+.next .t{font-size:14px}
+nav button{font-size:15px;padding:13px 14px}
+.tl li{grid-template-columns:128px 1fr auto;padding:14px 0;gap:14px}
+.date{font-size:14px;font-variant-numeric:lining-nums}
+.ev b{font-size:16px}
+.ev span{font-size:14px}
+.pill{font-size:13px;padding:3px 10px}
+.tag{font-size:12px;font-style:italic}
+.grp{font-size:13px;letter-spacing:.04em;margin-top:10px}
+#todo{display:flex;flex-direction:column;gap:7px}
+.check{font-size:15px;gap:12px}
+.check input{width:18px;height:18px;margin-top:4px;flex:none}
+.bar{height:10px}
+.progs{gap:18px}
+.prog{padding:20px;gap:12px;border-radius:14px}
+.prog h3{font-size:19px;line-height:1.3}
+.prog .where{font-size:12px;letter-spacing:.05em}
+.prog ul{font-size:15px;line-height:1.55}
+.prog li+li{margin-top:4px}
+.prog a,.link{font-size:14px}
+.toggle{font-size:14px;padding:9px 14px;min-height:40px;border-radius:10px}
+.docs{font-size:15px}.docs th{font-size:13px}.docs td{padding:11px 8px}
+.chipset span{font-size:14px;padding:4px 12px}
+.subj{gap:12px 16px;grid-template-columns:1fr 96px}
+.subj label{font-size:16px}.subj label small{font-size:13px}
+.subj input{width:96px;font-size:17px}
+.total .big{font-size:40px;font-weight:700}
+.floor{font-size:15px;padding:4px 0}
+.g{padding:16px 0}
+.g b{font-size:16px}
+.g .meta{font-size:13px}
+.chip{font-size:14px;padding:8px 15px}
+.refresh{font-size:14px;padding:8px 12px;min-height:38px}
+.feed{gap:18px}.feed.compact{gap:14px}
+.news{padding:16px 18px;gap:10px;border-radius:14px}
+.news h3{font-size:17px;line-height:1.4;font-weight:600}
+.news p{font-size:14px;line-height:1.55}
+.news .meta{font-size:13px}
+.cat{font-size:11px;letter-spacing:.05em}
+.toast{font-size:15px}
+@media (max-width:640px){h2{font-size:18px}.box{padding:16px}.tl li{grid-template-columns:1fr auto}.sub{font-size:16px}}
 </style>
 </head>
 <body>
