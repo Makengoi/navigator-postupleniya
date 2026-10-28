@@ -8,7 +8,13 @@ import { dirname, join } from "node:path";
 import vm from "node:vm";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const ctx = vm.createContext({});
+// i18n.js рассчитан на браузер (тема, размер текста), поэтому даём ему пустые заглушки DOM
+const noop = () => {};
+const ctx = vm.createContext({
+  document: { addEventListener: noop, querySelector: () => null, querySelectorAll: () => [], documentElement: { dataset: {}, style: {}, classList: { add: noop, remove: noop } } },
+  window: { addEventListener: noop, dispatchEvent: noop }, localStorage: { getItem: () => null, setItem: noop },
+  matchMedia: () => ({ matches: false, addEventListener: noop }), navigator: { language: "ru" }
+});
 for (const f of ["i18n.js", "data.js"]) vm.runInContext(await readFile(join(here, f), "utf8"), ctx);
 const PROGRAMS = ctx.PROGRAMS;
 
