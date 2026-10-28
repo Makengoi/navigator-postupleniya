@@ -100,3 +100,11 @@ var QUEST_MAP = {
  law:{progs:["ent","ucas","tr"],pair:"wl"},
  edu:{progs:["ent","hu","tr"],pair:""}
 };
+
+// Значок и фильтры программ: code — надпись на значке, color — цвет, reg — регион, fund — финансирование
+var PROG_META = {
+ nu:{code:"NU",color:"#1F3A68",reg:"kz",fund:"grant"}, ent:{code:"ҰБТ",color:"#0B7C83",reg:"kz",fund:"grant"}, kz:{code:"KZ",color:"#00A3C4",reg:"kz",fund:"grant"},
+ ucas:{code:"UK",color:"#C8102E",reg:"eu",fund:"paid"}, usa:{code:"US",color:"#3C3B6E",reg:"us",fund:"paid"}, hu:{code:"HU",color:"#3E7D3A",reg:"eu",fund:"full"},
+ tr:{code:"TR",color:"#D0342C",reg:"asia",fund:"full"}, cn:{code:"CN",color:"#DE2910",reg:"asia",fund:"full"}, kr:{code:"KR",color:"#0047A0",reg:"asia",fund:"full"},
+ jp:{code:"JP",color:"#BC002D",reg:"asia",fund:"full"}, de:{code:"DE",color:"#B8860B",reg:"eu",fund:"free"}
+};

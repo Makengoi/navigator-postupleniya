@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Кабинет куратора</title>
 <meta name="theme-color" content="#1F3A68">
-<script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th}catch(e){}</script>
+<script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th;var z=localStorage.getItem("nav.zoom");if(z&&z!="1")document.documentElement.style.zoom=z}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -107,7 +107,7 @@ textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
 <body>
 <div class="wrap">
   <div class="top"><div class="topl"><a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a><a class="brandname" href="index.html" data-i18n="title">Навигатор поступления</a></div>
-    <div class="topr"><div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div><button class="themebtn" data-theme-toggle></button></div></div>
+    <div class="topr"><div class="langs zoom" role="group"><button data-zoom="-1">A−</button><button data-zoom="1">A+</button></div><div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div><button class="themebtn" data-theme-toggle></button></div></div>
   <h1 data-i18n="c.title">Кабинет куратора</h1>
   <p class="sub" data-i18n="c.sub"></p>
   <div class="box">
@@ -205,7 +205,7 @@ document.getElementById("csv").addEventListener("click",()=>{
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+[head,...rows].map(r=>r.join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"}));
   a.download="klass-postuplenie.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1e3);
 });
-document.querySelector(".langs").addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b)return;setLang(b.dataset.lang);document.title=t("c.title");render()});
+document.querySelector(".langs:not(.zoom)").addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b)return;setLang(b.dataset.lang);document.title=t("c.title");render()});
 applyI18n();document.title=t("c.title");render();
 </script>
 </body>

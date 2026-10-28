@@ -44,3 +44,6 @@
   .rv{opacity:1;transform:none}
   .hero::before,.hero::after{animation:none}
 }
+
+/* Кнопки A− / A+ (размер текста) */
+.zoom button:disabled{opacity:.4;cursor:default}

@@ -6,7 +6,7 @@
 <title>Квест профессий</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#1F3A68">
-<script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th}catch(e){}</script>
+<script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th;var z=localStorage.getItem("nav.zoom");if(z&&z!="1")document.documentElement.style.zoom=z}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap">
@@ -142,7 +142,7 @@ select,input[type=text],input[type=date],input[type=number],textarea{font-family
 <body>
 <div class="wrap">
   <div class="top"><div class="topl"><a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a><a class="brandname" href="index.html" data-i18n="title">Навигатор поступления</a></div>
-    <div class="topr"><div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div><button class="themebtn" data-theme-toggle></button></div></div>
+    <div class="topr"><div class="langs zoom" role="group"><button data-zoom="-1">A−</button><button data-zoom="1">A+</button></div><div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div><button class="themebtn" data-theme-toggle></button></div></div>
   <h1 data-i18n="q.title">Квест профессий</h1>
   <p class="sub" data-i18n="q.sub"></p>
   <div class="route" id="route"></div>
@@ -237,7 +237,7 @@ function result(){
   <p class="note">${t("q.note")}</p>
   <button class="btn ghost" id="again">${t("q.again")}</button>`;
 }
-document.querySelector(".langs").addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b||b.dataset.lang===LANG)return;
+document.querySelector(".langs:not(.zoom)").addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b||b.dataset.lang===LANG)return;
   setLang(b.dataset.lang);document.title=t("q.title");
   if(finished)result();else{const keep=answered,r=rating;show();if(keep!==null){answered=keep;rating=r;const m=MISSIONS[i];card.querySelectorAll(".opt").forEach((x,k)=>{x.disabled=true;if(k===m.ok)x.classList.add("right");else if(k===answered)x.classList.add("wrong")});after()}}});
 applyI18n();document.title=t("q.title");

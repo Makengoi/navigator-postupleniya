@@ -141,6 +141,7 @@ function applyI18n() {
   document.querySelectorAll("[data-lang]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.lang === LANG); });
   document.querySelectorAll("[data-i18n-alt]").forEach(function (el) { el.alt = t(el.dataset.i18nAlt); });
   if (typeof navThemeButtons === "function") navThemeButtons();
+  if (typeof navZoomButtons === "function") navZoomButtons();
 }
 function setLang(l) { LANG = l; try { localStorage.setItem("nav.lang", l); } catch (e) {} applyI18n(); }
 function ago(ts) {
@@ -201,3 +202,63 @@ document.addEventListener("click", function (e) {
   vt.finished.finally(function () { root.classList.remove("vt"); });
 });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", navThemeButtons);
+
+// Дизайн-обновление: шкала дедлайнов, фильтры, онбординг, размер текста, достижения, печать
+(function (ru, kk) { for (var k in ru) { I18N.ru[k] = ru[k]; I18N.kk[k] = kk[k]; } })({
+ "strip.today":"Сегодня","strip.aria":"Дедлайны на ближайший год",
+ "ent.ring":"из 140",
+ "f.search":"Поиск программы или страны","f.all":"Все","f.kz":"Казахстан","f.eu":"Европа","f.asia":"Азия","f.us":"США",
+ "f.fund":"Финансирование","f.anyfund":"Любое","f.grant":"Госгрант / грант вуза","f.full":"Полная стипендия","f.free":"Бесплатное обучение","f.paid":"Платно, есть финпомощь",
+ "f.none":"Ничего не нашлось. Попробуйте другой запрос или сбросьте фильтры.","f.reset":"Сбросить фильтры",
+ "empty.pick":"Выбрать программы","empty.tl":"План пока пуст","empty.todo":"Шаги появятся, когда вы выберете программы","empty.docs":"Эссе и рекомендаций пока нет",
+ "onb.skip":"Пропустить","onb.next":"Дальше","onb.go":"Начать",
+ "onb.t1":"Выберите программы","onb.d1":"Во вкладке «Программы и гранты» добавьте в план вузы и стипендии, куда собираетесь подавать.",
+ "onb.t2":"Следите за планом","onb.d2":"Все дедлайны собираются на одной шкале. Отмечайте выполненные шаги, и прогресс заполнится.",
+ "onb.t3":"Покажите куратору","onb.d3":"Внизу плана скопируйте код или скачайте файл и отправьте куратору. Он увидит ваш прогресс в своём кабинете.",
+ "zoom.dec":"Уменьшить текст","zoom.inc":"Увеличить текст",
+ "ach.title":"Достижения","ach.got":"Новое достижение: {t}",
+ "ach.pick":"Первый шаг","ach.pickD":"Добавить программу в план","ach.p50":"Полпути","ach.p50D":"Выполнить половину плана","ach.p100":"План выполнен","ach.p100D":"Отметить все шаги",
+ "ach.essay":"Первое эссе готово","ach.essayD":"Статус «Готово» у документа","ach.quest":"Знаю, кем быть","ach.questD":"Пройти квест профессий","ach.ent":"Баллы посчитаны","ach.entD":"Ввести все баллы ЕНТ без «завалов»",
+ "ach.ics":"Ничего не пропущу","ach.icsD":"Сохранить дедлайны в календарь","ach.rep":"На связи с куратором","ach.repD":"Отправить отчёт куратору",
+ "print.btn":"Распечатать план","print.for":"План поступления","print.at":"Распечатано"
+}, {
+ "strip.today":"Бүгін","strip.aria":"Алдағы бір жылдағы мерзімдер",
+ "ent.ring":"140-тан",
+ "f.search":"Бағдарлама немесе ел іздеу","f.all":"Барлығы","f.kz":"Қазақстан","f.eu":"Еуропа","f.asia":"Азия","f.us":"АҚШ",
+ "f.fund":"Қаржыландыру","f.anyfund":"Кез келген","f.grant":"Мемгрант / ЖОО гранты","f.full":"Толық стипендия","f.free":"Тегін оқу","f.paid":"Ақылы, қаржылай көмек бар",
+ "f.none":"Ештеңе табылмады. Басқа сөзбен іздеңіз немесе сүзгіні тазалаңыз.","f.reset":"Сүзгіні тазалау",
+ "empty.pick":"Бағдарлама таңдау","empty.tl":"Жоспар әзірге бос","empty.todo":"Бағдарлама таңдағанда қадамдар осында шығады","empty.docs":"Әзірге эссе мен ұсыным хат жоқ",
+ "onb.skip":"Өткізу","onb.next":"Әрі қарай","onb.go":"Бастау",
+ "onb.t1":"Бағдарлама таңдаңыз","onb.d1":"«Бағдарламалар мен гранттар» қойындысында тапсыратын ЖОО мен стипендияларды жоспарға қосыңыз.",
+ "onb.t2":"Жоспарды қадағалаңыз","onb.d2":"Барлық мерзім бір шкалада жиналады. Орындалған қадамдарды белгілесеңіз, прогресс толады.",
+ "onb.t3":"Кураторға көрсетіңіз","onb.d3":"Жоспардың төменгі жағында кодты көшіріп немесе файлды жүктеп, кураторға жіберіңіз. Ол сіздің прогресіңізді өз кабинетінде көреді.",
+ "zoom.dec":"Мәтінді кішірейту","zoom.inc":"Мәтінді үлкейту",
+ "ach.title":"Жетістіктер","ach.got":"Жаңа жетістік: {t}",
+ "ach.pick":"Алғашқы қадам","ach.pickD":"Жоспарға бағдарлама қосу","ach.p50":"Жарты жол","ach.p50D":"Жоспардың жартысын орындау","ach.p100":"Жоспар орындалды","ach.p100D":"Барлық қадамды белгілеу",
+ "ach.essay":"Алғашқы эссе дайын","ach.essayD":"Құжат «Дайын» күйінде","ach.quest":"Кім болатынымды білемін","ach.questD":"Мамандық квестін өту","ach.ent":"Балл есептелді","ach.entD":"ҰБТ баллдарын шекті балдан төмен түспей енгізу",
+ "ach.ics":"Ештеңені өткізбеймін","ach.icsD":"Мерзімдерді күнтізбеге сақтау","ach.rep":"Куратормен байланыста","ach.repD":"Кураторға есеп жіберу",
+ "print.btn":"Жоспарды басып шығару","print.for":"Түсу жоспары","print.at":"Басып шығарылған күні"
+});
+
+// Размер текста: A− / A+ на всех страницах (zoom ставится ещё в <head>, здесь только кнопки)
+var NAV_ZOOMS = [0.9, 1, 1.1, 1.2];
+function navZoom() { var z = parseFloat(document.documentElement.style.zoom) || 1; return NAV_ZOOMS.indexOf(z) < 0 ? 1 : z; }
+document.addEventListener("click", function (e) {
+  var b = e.target.closest("[data-zoom]"); if (!b) return;
+  var i = NAV_ZOOMS.indexOf(navZoom()) + (+b.dataset.zoom), z = NAV_ZOOMS[Math.max(0, Math.min(NAV_ZOOMS.length - 1, i))];
+  document.documentElement.style.zoom = z === 1 ? "" : z;
+  try { localStorage.setItem("nav.zoom", z); } catch (err) {}
+  navZoomButtons();
+  window.dispatchEvent(new Event("resize"));
+});
+function navZoomButtons() {
+  var z = navZoom();
+  document.querySelectorAll("[data-zoom]").forEach(function (b) {
+    b.disabled = b.dataset.zoom < 0 ? z <= NAV_ZOOMS[0] : z >= NAV_ZOOMS[NAV_ZOOMS.length - 1];
+    b.setAttribute("aria-label", t(b.dataset.zoom < 0 ? "zoom.dec" : "zoom.inc")); b.title = b.getAttribute("aria-label");
+  });
+}
+(function (ru, kk) { for (var k in ru) { I18N.ru[k] = ru[k]; I18N.kk[k] = kk[k]; } })(
+ {"tabs.plan":"План","tabs.progs":"Программы","tabs.ent":"ЕНТ","tabs.docs":"Эссе","tabs.news":"Новости"},
+ {"tabs.plan":"Жоспар","tabs.progs":"Бағдарлама","tabs.ent":"ҰБТ","tabs.docs":"Эссе","tabs.news":"Жаңалық"});
+var NAV_MON = { ru: ["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"], kk: ["қаң","ақп","нау","сәу","мам","мау","шіл","там","қыр","қаз","қар","жел"] };

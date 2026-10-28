@@ -6,7 +6,7 @@
 <title>Навигатор поступления</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#1F3A68">
-<script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th}catch(e){}</script>
+<script>try{var th=localStorage.getItem("nav.theme");if(th)document.documentElement.dataset.theme=th;var z=localStorage.getItem("nav.zoom");if(z&&z!="1")document.documentElement.style.zoom=z}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -59,9 +59,10 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.6vw,44px);l
 .brand img{display:block;height:36px;width:auto}
 body{transition:background-color var(--dur-3) var(--ease-out),color var(--dur-3) var(--ease-out)}
 .hero .themebtn{border-color:var(--hero-line);background:var(--hero-glass);color:var(--hero-ink)}
-.hero .brand{padding:8px 14px;border-radius:16px;margin-bottom:16px;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:rise var(--dur-3) var(--ease-out) both}
-.hero .brand img{height:64px}
-@media (max-width:640px){.hero .brand img{height:48px}.hero .brand{margin-bottom:12px}}
+.titlerow{display:flex;align-items:center;gap:clamp(14px,2vw,24px);min-width:0}
+.hero .brand{padding:8px 12px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:rise var(--dur-3) var(--ease-out) both}
+.hero .brand img{height:clamp(56px,6vw,76px)}
+@media (max-width:640px){.hero .brand img{height:48px}.hero .brand{padding:6px 8px;border-radius:12px}}
 .langs{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:2px;background:var(--surface)}
 .hero .langs{border-color:var(--hero-line);background:var(--hero-glass)}
 .langs button{font:700 12px var(--body);border:0;background:none;color:var(--muted);padding:4px 10px;border-radius:99px;cursor:pointer;transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out)}
@@ -267,19 +268,136 @@ nav button{font-size:15px;padding:13px 14px}
 .cat{font-size:11px;letter-spacing:.05em}
 .toast{font-size:15px}
 @media (max-width:640px){h2{font-size:18px}.box{padding:16px}.tl li{grid-template-columns:1fr auto}.sub{font-size:16px}}
+
+/* ===== Дизайн-обновление ===== */
+/* Значки программ */
+.pb{--pc:var(--accent);display:inline-grid;place-items:center;min-width:34px;height:34px;padding:0 6px;border-radius:10px;background:var(--pc);color:#fff;font:700 12px/1 var(--body);letter-spacing:.02em;flex:none;box-shadow:inset 0 -2px 0 rgba(0,0,0,.18)}
+.ev .pb,.pb{color:#fff}
+.ev .pb.xs{font-size:10px}
+.pb.xs{min-width:24px;height:20px;border-radius:6px;font-size:10px;padding:0 4px;margin-right:6px;vertical-align:2px}
+.ph{display:flex;align-items:center;gap:12px}
+.prog{border-top:4px solid var(--pc,var(--line))}
+/* Шкала дедлайнов */
+.strip{position:relative;height:74px;margin:4px 6px 2px}
+.strip .track{position:absolute;left:0;right:0;top:30px;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--warn-soft) 0 8.2%,var(--line) 8.2%)}
+.strip .mt{position:absolute;top:24px;width:1px;height:18px;background:var(--line)}
+.strip .mt b{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+.strip .now{position:absolute;left:0;top:0;font-size:11px;font-weight:700;color:var(--warn);white-space:nowrap}
+.strip .now::after{content:"";position:absolute;left:0;top:18px;width:2px;height:24px;background:var(--warn);border-radius:2px}
+.strip .sd{--pc:var(--accent);position:absolute;top:calc(26px - var(--lv,0)*9px);width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--pc);border:2px solid var(--surface);box-shadow:0 0 0 1px var(--pc);cursor:pointer;padding:0;animation:pop var(--dur-2) var(--ease-spring) both;animation-delay:calc(min(var(--i,0),10)*var(--stagger));transition:transform var(--dur-1) var(--ease-out)}
+.strip .sd.soon{box-shadow:0 0 0 2px var(--warn)}
+.strip .sd:hover,.strip .sd:focus-visible{transform:scale(1.3);z-index:2}
+.strip .sd::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translate(-50%,4px);background:var(--ink);color:var(--surface);font:600 12px/1.35 var(--body);padding:6px 9px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity var(--dur-1) var(--ease-out),transform var(--dur-1) var(--ease-out)}
+.strip .sd.r::after{left:auto;right:-6px;transform:translateY(4px)}
+.strip .sd.l::after{left:-6px;transform:translateY(4px)}
+.strip .sd:hover::after,.strip .sd:focus-visible::after{opacity:1;transform:translate(-50%,0)}
+.strip .sd.r:hover::after,.strip .sd.l:hover::after,.strip .sd.r:focus-visible::after,.strip .sd.l:focus-visible::after{transform:none}
+.tl li.hl{animation:hl 1.2s var(--ease-out)}
+@keyframes hl{0%,30%{background:var(--accent-soft)}100%{background:transparent}}
+/* Кольцо ЕНТ */
+.total{gap:18px;align-items:center}
+.ring{position:relative;width:132px;height:132px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:10}
+.ring .rt{stroke:var(--line)}
+.ring .rp2{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:326.73;stroke-dashoffset:326.73;transition:stroke-dashoffset var(--dur-3) var(--ease-out),stroke var(--dur-2) var(--ease-out)}
+.ring.bad .rp2{stroke:var(--bad)}.ring.mid .rp2{stroke:var(--sun)}.ring.good .rp2{stroke:var(--ok)}
+.ring line{stroke:var(--surface);stroke-width:3}
+.ring .rc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.ring .rc .big{font-size:38px}
+.ring .rc .note{font-size:12px;margin-top:2px}
+/* Фильтры */
+.filters{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+#f-q{flex:1 1 260px;font:15px var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px 9px 38px;min-height:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238896a5' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px 50%;background-size:18px}
+#f-fund{background-color:var(--surface)}
+/* Пустые состояния */
+.es{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:18px 8px;color:var(--muted)}
+.es svg{width:120px;height:90px;color:var(--accent)}
+.es b{color:var(--ink);font-size:16px}
+.es .note{max-width:42ch}
+.tl li.eli{display:block}
+.progs .es{grid-column:1/-1}
+.es .float{animation:floaty 3.2s ease-in-out infinite alternate;transform-origin:60px 45px}
+@keyframes floaty{to{transform:translateY(-4px) rotate(8deg)}}
+/* Достижения */
+.ach{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.a{display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);transition:opacity var(--dur-2) var(--ease-out)}
+.a .m{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;background:var(--sun-soft);box-shadow:inset 0 0 0 2px var(--sun);flex:none}
+.a b{display:block;font-size:14px;line-height:1.3}
+.a small{display:block;font-size:12px;color:var(--muted);line-height:1.35}
+.a.off{opacity:.55}
+.a.off .m{filter:grayscale(1);background:var(--line);box-shadow:none}
+.a.new .m{animation:medal 700ms var(--ease-spring) both}
+@keyframes medal{0%{transform:scale(.3) rotate(-30deg)}60%{transform:scale(1.15) rotate(8deg)}100%{transform:none}}
+/* Онбординг */
+.onb{border:0;border-radius:20px;padding:28px 26px 22px;width:min(440px,calc(100% - 32px));background:var(--surface);color:var(--ink);box-shadow:0 24px 60px rgba(0,0,0,.3);text-align:center}
+.onb[open]{animation:rise var(--dur-3) var(--ease-out) both}
+.onb::backdrop{background:rgba(14,22,32,.55);backdrop-filter:blur(3px);animation:fade var(--dur-3) var(--ease-out)}
+@keyframes fade{from{opacity:0}}
+.onb-ill{height:120px;display:grid;place-items:center;color:var(--accent)}
+.onb-ill svg{width:150px;height:110px;animation:rise var(--dur-3) var(--ease-out) both}
+.onb h2{font-size:22px;margin:6px 0 8px}
+.onb p{margin:0 0 20px;color:var(--muted)}
+.onb-dots{display:flex;gap:6px;justify-content:center}
+.onb-dots i{width:8px;height:8px;border-radius:99px;background:var(--line);transition:width var(--dur-2) var(--ease-out),background var(--dur-2)}
+.onb-dots i.on{width:22px;background:var(--accent)}
+.onb-btns{display:flex;justify-content:space-between;align-items:center}
+/* Иконки вкладок и нижнее меню на телефоне */
+nav button{display:inline-flex;align-items:center;gap:7px;position:relative}
+nav .ni{width:18px;height:18px;flex:none;opacity:.85}
+.tl-short{display:none}
+.zoom button:disabled{opacity:.4;cursor:default}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:20}
+@media (max-width:640px){
+  body{padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+  .navbar{position:fixed;top:auto;bottom:0;left:0;right:0;padding:0 0 env(safe-area-inset-bottom,0px);border-bottom:0;border-top:1px solid var(--line);background:color-mix(in srgb,var(--surface) 94%,transparent);z-index:8}
+  .navbar::after{display:none}
+  nav{flex-wrap:nowrap;gap:0}
+  nav button{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;padding:9px 2px 7px;font-size:11px;line-height:1.2}
+  nav .ni{width:22px;height:22px}
+  .tl-full{display:none}.tl-short{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  nav .ind{bottom:auto;top:-1px;height:3px}
+  nav .badge{position:absolute;top:4px;left:calc(50% + 6px);margin:0}
+  .toast{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+  .ring{width:112px;height:112px}.ring .rc .big{font-size:32px}
+  .strip .mt:nth-of-type(even) b{display:none}
+}
+/* Печать: только план и документы, светлая тема */
+.printhead{display:none}
+@media print{
+  :root{--ink:#000!important;--muted:#333!important;--surface:#fff!important;--bg:#fff!important;--line:#bbb!important;--accent:#0B5F64!important}
+  html{zoom:1!important}
+  body{background:#fff;padding:0;font-size:12pt}
+  .hero,.navbar,#questbox,#watchbox,.achbox,.box:has(#admfeed),.box:has(#me-n),#p-progs,#p-ent,#p-news,.toast,.onb,#print,#ics,#docform,.strip,.x,.confetti{display:none!important}
+  #p-plan,#p-docs{display:flex!important}
+  .wrap{padding:0;gap:12px}
+  .cols3{display:block}
+  .cols3>.box{margin-bottom:12px}
+  .box{border:1px solid #bbb;break-inside:avoid;box-shadow:none}
+  .rv{opacity:1!important;transform:none!important}
+  .printhead{display:block;border-bottom:2px solid #000;padding-bottom:8px}
+  .printhead h1{font-size:20pt;animation:none}
+  .pb{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .pill{border:1px solid #999}
+  select{border:0;appearance:none;padding:0;min-height:0}
+}
 </style>
+<link rel="stylesheet" href="motion.css">
 </head>
 <body>
 <div class="hero">
   <header class="edge">
     <div>
-      <a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a>
-      <h1 data-i18n="title">Навигатор поступления</h1>
+      <div class="titlerow">
+        <a class="brand" href="index.html"><img src="nis-logo.png" width="233" height="240" data-i18n-alt="logo.alt" alt="NIS Туркестан"></a>
+        <h1 data-i18n="title">Навигатор поступления</h1>
+      </div>
       <p class="sub" data-i18n="sub"></p>
     </div>
     <div class="hright">
       <div class="toprow">
         <button class="install" id="install" hidden data-i18n="pwa.install"></button>
+        <div class="langs zoom" role="group"><button data-zoom="-1">A−</button><button data-zoom="1">A+</button></div>
         <div class="langs" role="group" data-i18n-aria="lang.aria"><button data-lang="ru">RU</button><button data-lang="kk">ҚАЗ</button></div>
         <button class="themebtn" data-theme-toggle></button>
       </div>
@@ -289,15 +407,16 @@ nav button{font-size:15px;padding:13px 14px}
 </div>
 <div class="navbar edge">
   <nav role="tablist">
-    <button role="tab" aria-selected="true" data-tab="plan" data-i18n="tab.plan"></button>
-    <button role="tab" aria-selected="false" data-tab="progs" data-i18n="tab.progs"></button>
-    <button role="tab" aria-selected="false" data-tab="ent" data-i18n="tab.ent"></button>
-    <button role="tab" aria-selected="false" data-tab="docs" data-i18n="tab.docs"></button>
-    <button role="tab" aria-selected="false" data-tab="news"><span data-i18n="tab.news"></span><span class="badge" id="newcount" hidden></span></button>
+    <button role="tab" aria-selected="true" data-tab="plan"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg><span class="tl-full" data-i18n="tab.plan"></span><span class="tl-short" data-i18n="tabs.plan"></span></button>
+    <button role="tab" aria-selected="false" data-tab="progs"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg><span class="tl-full" data-i18n="tab.progs"></span><span class="tl-short" data-i18n="tabs.progs"></span></button>
+    <button role="tab" aria-selected="false" data-tab="ent"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg><span class="tl-full" data-i18n="tab.ent"></span><span class="tl-short" data-i18n="tabs.ent"></span></button>
+    <button role="tab" aria-selected="false" data-tab="docs"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><span class="tl-full" data-i18n="tab.docs"></span><span class="tl-short" data-i18n="tabs.docs"></span></button>
+    <button role="tab" aria-selected="false" data-tab="news"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 16h4"/></svg><span class="tl-full" data-i18n="tab.news"></span><span class="tl-short" data-i18n="tabs.news"></span><span class="badge" id="newcount" hidden></span></button>
     <span class="ind" aria-hidden="true"></span>
   </nav>
 </div>
 <div class="wrap edge">
+  <div class="printhead" id="printhead"></div>
 
   <section class="panel" id="p-plan">
     <div class="box warnbox" id="watchbox" hidden></div>
@@ -305,15 +424,20 @@ nav button{font-size:15px;padding:13px 14px}
       <div class="box">
         <div class="boxhead"><h2 data-i18n="plan.deadlines"></h2>
           <button class="btn ghost sm" id="ics" data-i18n-title="plan.icsTitle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span data-i18n="plan.ics"></span></button></div>
+        <div class="strip" id="strip" role="img"></div>
         <ul class="tl" id="timeline"></ul>
         <p class="note" data-i18n="plan.note"></p>
       </div>
       <div class="box">
-        <h2 data-i18n="plan.todo"></h2>
+        <div class="boxhead"><h2 data-i18n="plan.todo"></h2><button class="btn ghost sm" id="print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg><span data-i18n="print.btn"></span></button></div>
         <div class="bar"><i id="bar" style="width:0"></i></div>
         <div id="todo"></div>
       </div>
       <div class="box span" id="questbox"></div>
+    </div>
+    <div class="box achbox">
+      <div class="boxhead"><h2 data-i18n="ach.title"></h2><span class="note" id="achcount"></span></div>
+      <div class="ach" id="ach"></div>
     </div>
     <div class="box">
       <div class="boxhead"><h2 data-i18n="news.fresh"></h2><button class="link" id="allnews" data-i18n="news.all"></button></div>
@@ -332,6 +456,13 @@ nav button{font-size:15px;padding:13px 14px}
   </section>
 
   <section class="panel" id="p-progs" hidden>
+    <div class="filters">
+      <input type="search" id="f-q" data-i18n-ph="f.search" autocomplete="off">
+      <div class="chips" id="f-reg">
+        <button class="chip" data-reg="all" aria-pressed="true" data-i18n="f.all"></button><button class="chip" data-reg="kz" aria-pressed="false" data-i18n="f.kz"></button><button class="chip" data-reg="eu" aria-pressed="false" data-i18n="f.eu"></button><button class="chip" data-reg="asia" aria-pressed="false" data-i18n="f.asia"></button><button class="chip" data-reg="us" aria-pressed="false" data-i18n="f.us"></button>
+      </div>
+      <select id="f-fund" data-i18n-aria="f.fund"><option value="" data-i18n="f.anyfund"></option><option value="grant" data-i18n="f.grant"></option><option value="full" data-i18n="f.full"></option><option value="free" data-i18n="f.free"></option><option value="paid" data-i18n="f.paid"></option></select>
+    </div>
     <p class="note" data-i18n="progs.note"></p>
     <div class="progs stg" id="progs"></div>
     <p class="note" id="watchnote"></p>
@@ -343,7 +474,7 @@ nav button{font-size:15px;padding:13px 14px}
         <h2 data-i18n="ent.title"></h2>
         <p class="note" data-i18n="ent.intro"></p>
         <div class="subj" id="subj"></div>
-        <div class="total"><span class="big" id="enttotal">0</span><span class="note" data-i18n="ent.of"></span></div>
+        <div class="total"><div class="ring" id="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="rt" cx="60" cy="60" r="52"/><circle class="rp2" id="ringp" cx="60" cy="60" r="52"/><g id="ringticks"></g></svg><div class="rc"><span class="big" id="enttotal">0</span><span class="note" data-i18n="ent.ring"></span></div></div></div>
         <p class="note" id="entvalid"></p>
       </div>
       <div class="box">
@@ -371,7 +502,7 @@ nav button{font-size:15px;padding:13px 14px}
         <button class="btn" type="submit" data-i18n="docs.add"></button>
       </form>
       <div class="scroll"><table class="docs"><thead><tr><th data-i18n="th.doc"></th><th data-i18n="th.type"></th><th data-i18n="th.due"></th><th data-i18n="th.status"></th><th></th></tr></thead><tbody id="docrows"></tbody></table></div>
-      <p class="empty" id="docempty" hidden data-i18n="docs.empty"></p>
+      <div id="docempty" hidden></div>
     </div>
   </section>
 
@@ -390,7 +521,16 @@ nav button{font-size:15px;padding:13px 14px}
   </section>
 </div>
 
+<dialog class="onb" id="onb" aria-labelledby="onb-t">
+  <div class="onb-ill" id="onb-ill"></div>
+  <div class="onb-dots" id="onb-dots"></div>
+  <h2 id="onb-t"></h2>
+  <p id="onb-d"></p>
+  <div class="onb-btns"><button class="link" id="onb-skip" data-i18n="onb.skip"></button><button class="btn" id="onb-next"></button></div>
+</dialog>
+
 <script src="i18n.js"></script>
+<script src="motion.js" defer></script>
 <script src="data.js"></script>
 <script src="feeds.js"></script>
 <script src="news.js"></script>
@@ -437,10 +577,100 @@ function countUp(el,to){
   (function step(now){const k=Math.min(1,(now-t0)/600),v=Math.round(from+(to-from)*(1-Math.pow(1-k,3)));el.textContent=t("days",{n:v});if(k<1)requestAnimationFrame(step)})(t0);
 }
 
+
+/* ---------- Значки, пустые состояния ---------- */
+const PM=window.PROG_META||{};
+const badge=(p,xs)=>{const m=PM[p.id]||{code:p.id.toUpperCase(),color:"#0B7C83"};return`<span class="pb${xs?" xs":""}" style="--pc:${m.color}" aria-hidden="true">${m.code}</span>`};
+const EMPTY_SVG=`<svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 74c18-4 22-22 40-22s22 16 52 8" stroke-dasharray="2 7" opacity=".55"/><circle cx="60" cy="40" r="26" fill="var(--accent-soft)"/><g class="float"><path d="M60 22l7 18-7 18-7-18z" fill="currentColor" stroke="none"/><path d="M60 40l7-18" stroke="var(--surface)" stroke-width="1.5"/></g><circle cx="60" cy="40" r="3" fill="var(--surface)" stroke="none"/><circle cx="14" cy="74" r="4" fill="currentColor" stroke="none"/><path d="M104 54l4 6 4-6" /><path d="M108 60v10"/></svg>`;
+function emptyState(title,text,btn){return`<div class="es">${EMPTY_SVG}<b>${title}</b>${text?`<p class="note">${text}</p>`:""}${btn||""}</div>`}
+const pickBtn=()=>`<button class="btn sm" data-goto="progs">${t("empty.pick")}</button>`;
+document.addEventListener("click",e=>{const b=e.target.closest("[data-goto]");if(b)showTab(b.dataset.goto)});
+
+/* ---------- Шкала дедлайнов на 12 месяцев ---------- */
+function renderStrip(up){
+  const el=document.getElementById("strip"),span=365;
+  el.hidden=!up.length;if(!up.length)return;
+  const x=d=>Math.min(100,Math.max(0,d/span*100));
+  let ticks="";const m=new Date(TODAY);m.setDate(1);
+  for(let k=1;k<=12;k++){const d=new Date(m.getFullYear(),m.getMonth()+k,1),n=Math.round((d-TODAY)/864e5);if(n>span)break;ticks+=`<i class="mt" style="left:${x(n)}%"><b>${NAV_MON[LANG][d.getMonth()]}</b></i>`}
+  const lv=[];let dots="";
+  up.filter(e=>days(e.d)<=span).forEach((e,i)=>{const n=days(e.d),p=x(n);let l=0;while(lv[l]!=null&&p-lv[l]<2.2)l++;lv[l]=p;
+    dots+=`<button class="sd ${n<=30?"soon":""} ${p>75?"r":p<12?"l":""}" style="left:${p}%;--lv:${Math.min(l,2)};--i:${i};--pc:${(PM[e.p.id]||{}).color||"var(--accent)"}" data-tip="${esc(L(e.p.name))}: ${fmt(e.d)}" data-ev="${e.p.id}${e.d}" aria-label="${esc(L(e.p.name))}: ${fmt(e.d)}"></button>`});
+  el.setAttribute("aria-label",t("strip.aria"));
+  el.innerHTML=`<div class="track"></div>${ticks}<span class="now">${t("strip.today")}</span>${dots}`;
+}
+document.getElementById("strip").addEventListener("click",e=>{const b=e.target.closest(".sd");if(!b)return;
+  const li=document.querySelector(`#timeline li[data-ev="${b.dataset.ev}"]`);if(!li)return;
+  li.scrollIntoView({block:"nearest",behavior:REDUCED?"auto":"smooth"});li.classList.remove("hl");void li.offsetWidth;li.classList.add("hl")});
+
+/* ---------- Фильтры программ ---------- */
+let pf={q:"",reg:"all",fund:""};
+const hay=p=>[p.name,p.where,PM[p.id]?.code||""].map(v=>typeof v==="object"?Object.values(v).join(" "):v).join(" ").toLowerCase();
+const passF=p=>(pf.reg==="all"||PM[p.id]?.reg===pf.reg)&&(!pf.fund||PM[p.id]?.fund===pf.fund)&&(!pf.q||hay(p).includes(pf.q.toLowerCase().trim()));
+document.getElementById("f-q").addEventListener("input",e=>{pf.q=e.target.value;render()});
+document.getElementById("f-fund").addEventListener("change",e=>{pf.fund=e.target.value;render()});
+document.getElementById("f-reg").addEventListener("click",e=>{const b=e.target.closest("[data-reg]");if(!b)return;pf.reg=b.dataset.reg;
+  document.querySelectorAll("#f-reg .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));render()});
+function resetFilters(){pf={q:"",reg:"all",fund:""};document.getElementById("f-q").value="";document.getElementById("f-fund").value="";
+  document.querySelectorAll("#f-reg .chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.reg==="all"));render()}
+
+/* ---------- Достижения ---------- */
+let flags=load("nav.flags",{});
+let achSeen=load("nav.ach",null);
+let planPct=0;
+const ACH=[["pick","🚀",()=>picked.length>0],["p50","🌓",()=>planPct>=50],["p100","🏆",()=>planPct>=100],["essay","✍️",()=>docs.some(d=>d.s==3)],
+  ["quest","🧭",()=>!!quest?.top?.length],["ent","🧮",()=>entCalc().valid],["ics","📅",()=>!!flags.ics],["rep","🤝",()=>!!flags.rep]];
+function setFlag(k){if(flags[k])return;flags[k]=Date.now();save("nav.flags",flags);renderAch()}
+function renderAch(){
+  const got=ACH.filter(a=>a[2]()).map(a=>a[0]),first=achSeen==null,fresh=first?[]:got.filter(k=>!achSeen.includes(k));
+  document.getElementById("ach").innerHTML=ACH.map(([k,ic])=>{const on=got.includes(k);return`<div class="a ${on?"":"off"} ${fresh.includes(k)?"new":""}" title="${esc(t("ach."+k+"D"))}"><span class="m" aria-hidden="true">${ic}</span><span><b>${t("ach."+k)}</b><small>${t("ach."+k+"D")}</small></span></div>`}).join("");
+  document.getElementById("achcount").textContent=got.length+" / "+ACH.length;
+  if(fresh.length)toast("🏅 "+t("ach.got",{t:fresh.map(k=>t("ach."+k)).join(", ")}));
+  if(first||fresh.length||got.length!==achSeen.length){achSeen=got;save("nav.ach",got)}
+}
+
+/* ---------- Конфетти, когда план выполнен на 100% ---------- */
+function confetti(){
+  if(REDUCED)return;
+  const c=document.createElement("canvas");c.className="confetti";document.body.append(c);
+  const dpr=devicePixelRatio||1,W=c.width=innerWidth*dpr,H=c.height=innerHeight*dpr,x=c.getContext("2d");
+  const cols=["#0B7C83","#C98A12","#1F3A68","#2E7D4F","#F0A170","#6B4BB8"];
+  const ps=Array.from({length:140},()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.35,vx:(Math.random()-.5)*16*dpr,vy:(-Math.random()*16-6)*dpr,r:Math.random()*Math.PI,vr:(Math.random()-.5)*.3,s:(5+Math.random()*6)*dpr,c:cols[Math.random()*cols.length|0]}));
+  const t0=performance.now();
+  (function f(now){const k=(now-t0)/1600;x.clearRect(0,0,W,H);
+    ps.forEach(p=>{p.vy+=.45*dpr;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.globalAlpha=Math.max(0,1-k*k);x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});
+    if(k<1)requestAnimationFrame(f);else c.remove()})(t0);
+}
+let wasFull=null;
+
+/* ---------- Печать ---------- */
+document.getElementById("print").addEventListener("click",()=>window.print());
+addEventListener("beforeprint",()=>{document.getElementById("printhead").innerHTML=`<h1>${t("print.for")}${me.n.trim()?": "+esc(me.n.trim()):""}${me.c.trim()?" · "+esc(me.c.trim()):""}</h1><p class="note">${t("title")} · ${t("print.at")}: ${fmt(navIso(new Date()))}</p>`});
+
+/* ---------- Онбординг при первом входе ---------- */
+const ONB_ILL=[ICON_SVG(`<path d="M20 50l55-27 55 27-55 27z" fill="var(--accent-soft)"/><path d="M42 61v22c18 12 48 12 66 0V61"/><path d="M130 50v26"/><circle cx="130" cy="80" r="4" fill="currentColor"/>`),
+  ICON_SVG(`<path d="M15 60h120" stroke-width="5" stroke="var(--line)"/><path d="M15 60h48" stroke-width="5"/><circle cx="30" cy="60" r="7" fill="currentColor"/><circle cx="63" cy="60" r="7" fill="var(--sun)" stroke="var(--sun)"/><circle cx="98" cy="60" r="7" fill="var(--surface)"/><circle cx="125" cy="60" r="7" fill="var(--surface)"/><path d="M26 60l3 3 5-6" stroke="var(--surface)"/>`),
+  ICON_SVG(`<rect x="22" y="22" width="62" height="70" rx="8" fill="var(--accent-soft)"/><path d="M34 42h38M34 54h38M34 66h24"/><path d="M92 58h40M118 44l14 14-14 14"/>`)];
+function ICON_SVG(inner){return`<svg viewBox="0 0 150 110" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`}
+let onbStep=0;
+function renderOnb(){
+  document.getElementById("onb-ill").innerHTML=ONB_ILL[onbStep];
+  document.getElementById("onb-dots").innerHTML=[0,1,2].map(i=>`<i class="${i===onbStep?"on":""}"></i>`).join("");
+  document.getElementById("onb-t").textContent=t("onb.t"+(onbStep+1));
+  document.getElementById("onb-d").textContent=t("onb.d"+(onbStep+1));
+  document.getElementById("onb-next").textContent=onbStep<2?t("onb.next"):t("onb.go");
+}
+const onb=document.getElementById("onb");
+function closeOnb(){save("nav.onb",Date.now());onb.close()}
+document.getElementById("onb-next").addEventListener("click",()=>{if(onbStep<2){onbStep++;renderOnb()}else{closeOnb();showTab("progs")}});
+document.getElementById("onb-skip").addEventListener("click",closeOnb);
+onb.addEventListener("cancel",()=>save("nav.onb",Date.now()));
+
 function render(){
   const evs=pickedEvents();
   const up=evs.filter(e=>days(e.d)>=0);
-  document.getElementById("timeline").innerHTML=evs.length?[...up,...evs.filter(e=>days(e.d)<0)].map(e=>`<li><span class="date">${fmt(e.d)}</span><span class="ev"><b>${L(e.p.name)}${e.exp?`<span class="tag">${t("exp")}</span>`:""}</b><span>${L(e.t)}</span></span>${pill(days(e.d))}</li>`).join(""):`<li><span class="empty">${t("plan.tlEmpty")}</span></li>`;
+  renderStrip(up);
+  document.getElementById("timeline").innerHTML=evs.length?[...up,...evs.filter(e=>days(e.d)<0)].map(e=>`<li data-ev="${e.p.id}${e.d}"><span class="date">${fmt(e.d)}</span><span class="ev"><b>${badge(e.p,1)}${L(e.p.name)}${e.exp?`<span class="tag">${t("exp")}</span>`:""}</b><span>${L(e.t)}</span></span>${pill(days(e.d))}</li>`).join(""):`<li class="eli">${emptyState(t("empty.tl"),t("plan.tlEmpty"),pickBtn())}</li>`;
   document.getElementById("ics").disabled=!up.length;
   const n=up[0],next=document.getElementById("next");
   if(n){
@@ -448,17 +678,20 @@ function render(){
     countUp(document.getElementById("nextn"),days(n.d));
   }else next.innerHTML=`<div class="k">${t("next.k")}</div><div class="t">${t("next.none")}</div>`;
   let total=0,cnt=0;
-  document.getElementById("todo").innerHTML=PROGRAMS.filter(p=>picked.includes(p.id)).map(p=>`<div class="grp">${L(p.name)}</div>`+p.todo.map((s,i)=>{const k=p.id+i;total++;if(done[k])cnt++;return`<label class="check ${done[k]?"done":""}"><input type="checkbox" data-k="${k}" ${done[k]?"checked":""}><span>${L(s)}</span></label>`}).join("")).join("")||`<p class="empty">${t("plan.todoEmpty")}</p>`;
-  document.getElementById("bar").style.width=total?(cnt/total*100)+"%":"0";
+  document.getElementById("todo").innerHTML=PROGRAMS.filter(p=>picked.includes(p.id)).map(p=>`<div class="grp">${L(p.name)}</div>`+p.todo.map((s,i)=>{const k=p.id+i;total++;if(done[k])cnt++;return`<label class="check ${done[k]?"done":""}"><input type="checkbox" data-k="${k}" ${done[k]?"checked":""}><span>${L(s)}</span></label>`}).join("")).join("")||emptyState(t("empty.todo"),"",pickBtn());
+  const bar=document.getElementById("bar");bar.style.width=total?(cnt/total*100)+"%":"0";bar.classList.toggle("full",!!total&&cnt===total);
+  planPct=total?Math.round(cnt/total*100):0;const full=!!total&&cnt===total;if(full&&wasFull===false)confetti();wasFull=full;
   const rec=questRecs().progs;
-  document.getElementById("progs").innerHTML=PROGRAMS.map((p,i)=>{const on=picked.includes(p.id),ch=changedAt(p.id);return`<article class="prog ${on?"on":""}" style="--i:${i}"><div class="where"><span>${L(p.where)}</span>${rec.includes(p.id)?`<span class="rec">${t("progs.rec")}</span>`:""}</div><h3>${L(p.name)}</h3>${ch?`<div class="chg">${t("progs.changed",{ago:ago(ch)})}</div>`:""}<ul>${p.req.map(r=>`<li>${L(r)}</li>`).join("")}</ul><div class="note">${eventsOf(p).map(e=>`${fmt(e.d)}: ${L(e.t)}${e.exp?` (${t("exp")})`:""}`).join("<br>")}</div><a href="${p.url}" target="_blank" rel="noopener">${t("progs.site")}</a><button class="toggle" data-id="${p.id}">${on?t("progs.in"):t("progs.add")}</button></article>`}).join("");
+  const shown=PROGRAMS.filter(passF);
+  document.getElementById("progs").innerHTML=!shown.length?emptyState(t("f.none"),"",`<button class="btn sm ghost" id="f-reset">${t("f.reset")}</button>`):shown.map((p,i)=>{const on=picked.includes(p.id),ch=changedAt(p.id);return`<article class="prog ${on?"on":""}" style="--i:${i};--pc:${(PM[p.id]||{}).color||"var(--line)"}"><div class="where"><span>${L(p.where)}</span>${rec.includes(p.id)?`<span class="rec">${t("progs.rec")}</span>`:""}</div><div class="ph">${badge(p)}<h3>${L(p.name)}</h3></div>${ch?`<div class="chg">${t("progs.changed",{ago:ago(ch)})}</div>`:""}<ul>${p.req.map(r=>`<li>${L(r)}</li>`).join("")}</ul><div class="note">${eventsOf(p).map(e=>`${fmt(e.d)}: ${L(e.t)}${e.exp?` (${t("exp")})`:""}`).join("<br>")}</div><a href="${p.url}" target="_blank" rel="noopener">${t("progs.site")}</a><button class="toggle" data-id="${p.id}">${on?t("progs.in"):t("progs.add")}</button></article>`}).join("");
   document.getElementById("watchnote").textContent=WATCH?.at?t("watch.checked",{ago:ago(WATCH.at)}):"";
   const chg=picked.filter(changedAt);
   const wb=document.getElementById("watchbox");wb.hidden=!chg.length;
   wb.innerHTML=chg.length?`<h2>${t("watch.title")}</h2>`+chg.map(id=>`<div><b>${L(PROG[id].name)}</b> — ${t("watch.changed",{ago:ago(changedAt(id))})} <a class="link" href="${PROG[id].url}" target="_blank" rel="noopener">${t("progs.site")}</a></div>`).join(""):"";
   renderQuest();
   document.getElementById("docrows").innerHTML=docs.map((d,i)=>`<tr><td>${esc(docTitle(d))}${d.ex?`<span class="tag">${t("docs.example")}</span>`:""}</td><td>${esc(docType(d))}</td><td>${d.d?fmt(d.d)+" "+pill(days(d.d)):"—"}</td><td><select data-i="${i}">${[0,1,2,3].map(j=>`<option value="${j}" ${d.s==j?"selected":""}>${t("st."+j)}</option>`).join("")}</select></td><td><button class="x" data-del="${i}" aria-label="${t("docs.del")}">×</button></td></tr>`).join("");
-  document.getElementById("docempty").hidden=docs.length>0;
+  const de=document.getElementById("docempty");de.hidden=docs.length>0;de.innerHTML=docs.length?"":emptyState(t("empty.docs"),t("docs.empty"));
+  renderAch();
 }
 function renderQuest(){
   const box=document.getElementById("questbox");
@@ -488,7 +721,7 @@ function icsText(){
   lines.push("END:VCALENDAR");
   return lines.map(fold).join("\r\n")+"\r\n";
 }
-document.getElementById("ics").addEventListener("click",()=>{download("deadlines.ics",icsText(),"text/calendar;charset=utf-8");toast(t("plan.icsDone"))});
+document.getElementById("ics").addEventListener("click",()=>{download("deadlines.ics",icsText(),"text/calendar;charset=utf-8");toast(t("plan.icsDone"));setFlag("ics")});
 
 /* ---------- Калькулятор ЕНТ ---------- */
 function entCalc(){
@@ -503,10 +736,15 @@ function renderEntInputs(){
   document.getElementById("pair").innerHTML=`<option value="">${t("ent.pairAll")}</option>`+Object.keys(ENT_PAIRS).map(k=>`<option value="${k}" ${(ent.pair||qp)===k?"selected":""}>${L(ENT_PAIRS[k])}</option>`).join("");
   document.getElementById("pairnote").textContent=!ent.pair&&qp?t("ent.fromQuest"):"";
 }
+document.getElementById("ringticks").innerHTML=[50,65,70,75].map(v=>{const a=v/140*2*Math.PI;return`<line x1="${60+46*Math.cos(a)}" y1="${60+46*Math.sin(a)}" x2="${60+58*Math.cos(a)}" y2="${60+58*Math.sin(a)}"/>`}).join("");
 function renderEnt(){
   const c=entCalc(),pair=document.getElementById("pair").value;
   document.querySelectorAll("#subj input").forEach((el,i)=>el.classList.toggle("low",c.vals[i]!=null&&c.vals[i]<ENT_SUBJECTS[i].min));
   document.getElementById("enttotal").textContent=c.total;
+  const C=326.73,ring=document.getElementById("ring");
+  document.getElementById("ringp").style.strokeDashoffset=C*(1-Math.min(c.total,140)/140);
+  ring.className="ring "+(!c.filled?"":!c.valid||c.total<50?"bad":c.total<75?"mid":"good");
+  renderAch();
   document.getElementById("entvalid").textContent=!c.filled?"":c.valid?t("ent.valid"):t("ent.invalid",{list:c.low.map(s=>L(s.name)).join(", ")});
   document.getElementById("floors").innerHTML=[50,65,70,75].map(f=>{const ok=c.valid&&c.total>=f;return`<div class="floor"><span>${t("floor."+f)} · ${f}</span>${c.filled?`<span class="pill ${ok?"p-good":"p-bad"}">${ok?"✓":"✗"}</span>`:""}</div>`}).join("");
   const pos=v=>(v/140*100).toFixed(1)+"%";
@@ -528,8 +766,8 @@ document.getElementById("me-n").value=me.n;document.getElementById("me-c").value
 ["me-n","me-c"].forEach(id=>document.getElementById(id).addEventListener("input",e=>{me[id==="me-n"?"n":"c"]=e.target.value;save("nav.me",me)}));
 document.getElementById("rep-copy").addEventListener("click",async()=>{if(!needName())return;const code=reportCode();
   try{await navigator.clipboard.writeText(code)}catch(e){const ta=document.createElement("textarea");ta.value=code;document.body.append(ta);ta.select();document.execCommand("copy");ta.remove()}
-  toast(t("cur.copied"))});
-document.getElementById("rep-file").addEventListener("click",()=>{if(!needName())return;download(`otchet-${me.n.trim().replace(/\s+/g,"-")}.json`,JSON.stringify(report(),null,1),"application/json");toast(t("cur.saved"))});
+  toast(t("cur.copied"));setFlag("rep")});
+document.getElementById("rep-file").addEventListener("click",()=>{if(!needName())return;download(`otchet-${me.n.trim().replace(/\s+/g,"-")}.json`,JSON.stringify(report(),null,1),"application/json");toast(t("cur.saved"));setFlag("rep")});
 
 /* ---------- Новости: основной источник news.js (его пишет update-news.mjs по расписанию),
    запасной — RSS через публичные CORS-прокси. Последний результат кэшируется в localStorage ---------- */
@@ -609,10 +847,13 @@ function moveInd(){const b=document.querySelector(`nav [data-tab="${cur}"]`),ind
 function replay(p){p.classList.remove("enter");void p.offsetWidth;p.classList.add("enter")}
 function showTab(tab){
   if(cur==="news"&&tab!=="news"){seenAt=Date.now();save("nav.newsSeen",seenAt)}
-  cur=tab;
+  const prev=cur;cur=tab;
   document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===tab));
-  TABS.forEach(n=>{const p=document.getElementById("p-"+n);p.hidden=n!==tab;if(n===tab)replay(p)});
+  const dir=TABS.indexOf(tab)>TABS.indexOf(prev)?"next":TABS.indexOf(tab)<TABS.indexOf(prev)?"prev":"";
+  TABS.forEach(n=>{const p=document.getElementById("p-"+n);p.hidden=n!==tab;if(n===tab){p.dataset.dir=dir;replay(p)}});
   moveInd();
+  const w=document.querySelector(".wrap"),nb=document.querySelector(".navbar"),top=w.getBoundingClientRect().top+scrollY-(getComputedStyle(nb).position==="sticky"?nb.offsetHeight:0);
+  if(scrollY>top+4)scrollTo({top,behavior:REDUCED?"auto":"smooth"});
   if(tab==="news"){if(!seenAt){seenAt=Date.now();save("nav.newsSeen",seenAt)}if(Date.now()-news.at>STALE)refreshNews();renderNews()}
 }
 document.querySelectorAll(".panel").forEach(p=>p.addEventListener("animationend",e=>{if(e.target===p)p.classList.remove("enter")}));
@@ -628,17 +869,17 @@ document.getElementById("questbox").addEventListener("click",e=>{
   if(e.target.id==="qadd"){picked=[...new Set([...picked,...questRecs().progs])];save("nav.picked",picked);render()}
   if(e.target.id==="qcalc")showTab("ent");
 });
-document.getElementById("progs").addEventListener("click",e=>{const b=e.target.closest(".toggle");if(!b)return;
+document.getElementById("progs").addEventListener("click",e=>{if(e.target.id==="f-reset")return resetFilters();const b=e.target.closest(".toggle");if(!b)return;
   const id=b.dataset.id;picked=picked.includes(id)?picked.filter(x=>x!==id):[...picked,id];save("nav.picked",picked);render()});
 document.getElementById("todo").addEventListener("change",e=>{const k=e.target.dataset.k;if(!k)return;done[k]=e.target.checked;save("nav.done",done);render()});
 document.getElementById("docform").addEventListener("submit",e=>{e.preventDefault();const title=document.getElementById("d-title").value.trim();if(!title)return;
   docs.push({t:title,type:I18N.ru["doc."+document.getElementById("d-type").value],d:document.getElementById("d-due").value,s:0});save("nav.docs",docs);e.target.reset();render()});
-document.getElementById("docrows").addEventListener("change",e=>{const i=e.target.dataset.i;if(i==null)return;docs[i].s=+e.target.value;save("nav.docs",docs)});
+document.getElementById("docrows").addEventListener("change",e=>{const i=e.target.dataset.i;if(i==null)return;docs[i].s=+e.target.value;save("nav.docs",docs);renderAch()});
 document.getElementById("docrows").addEventListener("click",e=>{const i=e.target.dataset.del;if(i==null)return;docs.splice(i,1);save("nav.docs",docs);render()});
 
 /* ---------- Язык ---------- */
-document.querySelector(".langs").addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b||b.dataset.lang===LANG)return;
-  setLang(b.dataset.lang);document.title=t("title");render();renderEntInputs();renderEnt();renderNews();moveInd()});
+document.querySelector(".langs:not(.zoom)").addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b||b.dataset.lang===LANG)return;
+  setLang(b.dataset.lang);document.title=t("title");if(onb.open)renderOnb();render();renderEntInputs();renderEnt();renderNews();moveInd()});
 
 /* ---------- PWA: офлайн-режим и установка (работает на http/https, не через file://) ---------- */
 if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js").catch(()=>{});
@@ -659,6 +900,7 @@ applyI18n();document.title=t("title");
 render();renderEntInputs();renderEnt();moveInd();renderNews();
 if(location.hash&&TABS.includes(location.hash.slice(1)))showTab(location.hash.slice(1));
 if(Date.now()-news.at>STALE)refreshNews();
+if(!load("nav.onb",0)&&typeof onb.showModal==="function"){renderOnb();onb.showModal()}
 </script>
 </body>
 </html>
